@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UABackbone-Backend", "UABackbone-Backend.csproj", "{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F67925E6-FC56-4286-A936-85A067B91D49}
+	EndGlobalSection
+EndGlobal
