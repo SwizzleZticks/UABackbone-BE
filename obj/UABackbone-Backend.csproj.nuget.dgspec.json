@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Josh\\source\\repos\\UABackbone-Backend\\UABackbone-Backend.csproj": {}
+    "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Josh\\source\\repos\\UABackbone-Backend\\UABackbone-Backend.csproj": {
+    "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Josh\\source\\repos\\UABackbone-Backend\\UABackbone-Backend.csproj",
+        "projectUniqueName": "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj",
         "projectName": "UABackbone-Backend",
-        "projectPath": "C:\\Users\\Josh\\source\\repos\\UABackbone-Backend\\UABackbone-Backend.csproj",
+        "projectPath": "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj",
         "packagesPath": "C:\\Users\\Josh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Josh\\source\\repos\\UABackbone-Backend\\obj\\",
+        "outputPath": "C:\\Users\\Josh\\source\\UABackbone-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,6 +51,12 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.0, )"
             },
