@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UABackbone-Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82b365d216e2f6bb7326ebb2b1a72abc88a6e36e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dee952621df8db063d7e11cecf34ceb1c8aa2b49")]
 [assembly: System.Reflection.AssemblyProductAttribute("UABackbone-Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UABackbone-Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
