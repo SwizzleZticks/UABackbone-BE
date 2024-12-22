@@ -1,5 +1,15 @@
-﻿*.suo
+
+#ignore thumbnails created by windows
+Thumbs.db
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.suo
 *.user
+*.aps
+*.pch
+*.vspscc
 *.userosscache
 *.sln.docstates
 *.userprefs
@@ -26,12 +36,10 @@ project.fragment.lock.json
 artifacts/
 *_i.c
 *_p.c
+*.ncb
 *_i.h
 *.ilk
 *.meta
-*.obj
-*.pch
-*.pdb
 *.pgc
 *.pgd
 *.rsp
@@ -39,10 +47,50 @@ artifacts/
 *.tlb
 *.tli
 *.tlh
+*.bak
+*.cache
 *.tmp
 *.tmp_proj
 *.log
-*.vspscc
+*.dll
+*.lib
+bin/
+obj/
+packages/
+
+.DS_Store
+node_modules
+/dist
+package-lock.json
+
+# Add any directories, files, or patterns you don't want to be tracked by version control
+
+# Eclipse
+.classpath
+.project
+.settings
+target/
+
+# IntelliJ
+*.iml
+
+# .NET
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.ntvs*
+*.njsproj
+*.sw*
 *.vssscc
 .builds
 *.pidb
@@ -50,8 +98,6 @@ artifacts/
 *.scc
 _Chutzpah*
 ipch/
-*.aps
-*.ncb
 *.opendb
 *.opensdf
 *.sdf
@@ -114,6 +160,16 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
+
+# Cypress e2e Testing
+cypress/screenshots
+cypress/videos
+/tests/e2e/videos/
+/tests/e2e/screenshots/
+
+#additional json to ignore
+config.json
+launchSettings.json
 *.pfx
 *.publishsettings
 node_modules/
