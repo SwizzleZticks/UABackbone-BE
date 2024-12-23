@@ -16,7 +16,7 @@ public class LocalsController : ControllerBase
     }
     
     //TODO
-    //Limit number of locals shown
+    //Limit number of locals shown(possible start index and end index query)-list.getrange
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<LocalUnion>> GetLocalsAsync()
@@ -48,25 +48,11 @@ public class LocalsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short id, [FromBody] LocalUnion aLocal)
     {
-        var existingLocal = await _context.LocalUnions.FindAsync(id);
-
-        if (existingLocal == null)
-        {
-            return NotFound();
-        }
-        
-        existingLocal.Location        = aLocal.Location;
-        existingLocal.Wage            = aLocal.Wage;
-        existingLocal.Vacation        = aLocal.Vacation;
-        existingLocal.HealthWelfare   = aLocal.HealthWelfare;
-        existingLocal.NationalPension = aLocal.NationalPension;
-        existingLocal.LocalPension    = aLocal.LocalPension;
-        existingLocal.Annuity         = aLocal.Annuity;
-        existingLocal.LastUpdated     = aLocal.LastUpdated;
-        
+        aLocal.Local = id;
+        _context.Update(aLocal);
         await _context.SaveChangesAsync();
         
-        return Ok(existingLocal);
+        return Ok(aLocal);
     }
 
     [HttpDelete("{id}")]
