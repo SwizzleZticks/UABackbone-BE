@@ -13,6 +13,8 @@ public partial class RailwayContext : DbContext
 
     public virtual DbSet<LocalUnion> LocalUnions { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -31,6 +33,34 @@ public partial class RailwayContext : DbContext
             entity.Property(e => e.NationalPension).HasPrecision(5, 2);
             entity.Property(e => e.Vacation).HasPrecision(5, 2);
             entity.Property(e => e.Wage).HasPrecision(5, 2);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.HasIndex(e => e.LocalId, "Users_LocalUnions_FK");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email)
+                  .HasMaxLength(255)
+                  .HasColumnName("email");
+            entity.Property(e => e.FirstName)
+                  .HasMaxLength(35)
+                  .HasColumnName("first_name");
+            entity.Property(e => e.IsAdmin).HasColumnName("is_admin");
+            entity.Property(e => e.IsBlacklisted).HasColumnName("is_blacklisted");
+            entity.Property(e => e.IsVerified).HasColumnName("is_verified");
+            entity.Property(e => e.LastName)
+                  .HasMaxLength(35)
+                  .HasColumnName("last_name");
+            entity.Property(e => e.LocalId).HasColumnName("local_id");
+            entity.Property(e => e.PasswordHash)
+                  .HasMaxLength(255)
+                  .HasColumnName("password_hash");
+            entity.Property(e => e.Username)
+                  .HasMaxLength(55)
+                  .HasColumnName("username");
         });
 
         OnModelCreatingPartial(modelBuilder);
