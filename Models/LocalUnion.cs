@@ -20,4 +20,5 @@ public partial class LocalUnion
     public decimal? LocalPension { get; set; }
 
     public decimal? Annuity { get; set; }
+    
 }
