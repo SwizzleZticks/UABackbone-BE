@@ -5,8 +5,7 @@ namespace UABackbone_Backend.Models;
 
 public partial class LocalUnion
 {
-    public short Local { get; set; }
-
+    public short Local { get; set; } //locals identifier
     public string? Location { get; set; }
 
     public decimal? Wage { get; set; }
@@ -20,5 +19,4 @@ public partial class LocalUnion
     public decimal? LocalPension { get; set; }
 
     public decimal? Annuity { get; set; }
-    
 }

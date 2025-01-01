@@ -44,7 +44,8 @@ public partial class RailwayContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)
                   .HasMaxLength(255)
-                  .HasColumnName("email");
+                  .HasColumnName("email")
+                  .IsUnicode();
             entity.Property(e => e.FirstName)
                   .HasMaxLength(35)
                   .HasColumnName("first_name");
@@ -54,13 +55,17 @@ public partial class RailwayContext : DbContext
             entity.Property(e => e.LastName)
                   .HasMaxLength(35)
                   .HasColumnName("last_name");
-            entity.Property(e => e.LocalId).HasColumnName("local_id");
+            entity.Property(e => e.LocalId)
+                  .HasColumnName("local_id")
+                  .IsRequired();
             entity.Property(e => e.PasswordHash)
-                  .HasMaxLength(255)
-                  .HasColumnName("password_hash");
+                  .HasMaxLength(60)
+                  .HasColumnName("password_hash")
+                  .IsRequired();
             entity.Property(e => e.Username)
                   .HasMaxLength(55)
-                  .HasColumnName("username");
+                  .HasColumnName("username")
+                  .IsRequired();
         });
 
         OnModelCreatingPartial(modelBuilder);
