@@ -3,9 +3,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class AuthController : Controller
+public class AuthController : BaseApiController
 {
     //Login
     
