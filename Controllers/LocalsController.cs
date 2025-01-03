@@ -14,50 +14,51 @@ public class LocalsController(RailwayContext context) : BaseApiController
         return Ok(await context.LocalUnions.ToListAsync());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> GetLocalByIdAsync(short id)
+    public async Task<ActionResult<LocalUnion>> GetLocalByIdAsync(short local)
     {
-        var local = await context.LocalUnions.FindAsync(id);
-        return local != null ? Ok(local) : NotFound();
+        var localUnion = await context.LocalUnions.FindAsync(local);
+        return localUnion != null ? Ok(localUnion) : NotFound();
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<LocalUnion>> CreateLocalAsync([FromBody] LocalUnion newLocal)
     {
         context.LocalUnions.Add(newLocal);
         await context.SaveChangesAsync();
 
-        return newLocal;
+        return Created("api/Locals",newLocal);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short id, [FromBody] LocalUnion aLocal)
+    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short local, [FromBody] LocalUnion aLocal)
     {
-        aLocal.Local = id;
+        aLocal.Local = local;
         context.Update(aLocal);
         await context.SaveChangesAsync();
         
         return Ok(aLocal);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{local}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteLocalAsync(short id)
+    public async Task<ActionResult> DeleteLocalAsync(short local)
     {
-        var local = await context.LocalUnions.FindAsync(id);
+        var localUnion = await context.LocalUnions.FindAsync(local);
 
-        if (local == null)
+        if (localUnion == null)
         {
             return NotFound("Local not found");
         }
         
-        context.LocalUnions.Remove(local);
+        context.LocalUnions.Remove(localUnion);
         await context.SaveChangesAsync();
         
         return NoContent();
