@@ -38,7 +38,7 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var UserDto = new UserDto
+        var userDto = new UserDto
         {
             Username = registerDto.Username,
             FirstName = registerDto.FirstName,
@@ -48,7 +48,7 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
             Token = tokenService.CreateToken(user)
         };
 
-        return Created("api/Account/register",UserDto);
+        return Created("api/Account/register",userDto);
     }
 
     [HttpPost("login")]
