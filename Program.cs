@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
+using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
+using UABackbone_Backend.Services;
 
 namespace UABackbone_Backend
 {
@@ -25,6 +27,7 @@ namespace UABackbone_Backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
             var app = builder.Build();
 
