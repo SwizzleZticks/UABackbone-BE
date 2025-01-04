@@ -1,5 +1,8 @@
 
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 using UABackbone_Backend.Services;
@@ -28,6 +31,19 @@ namespace UABackbone_Backend
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY") ??
+                                   throw new Exception("Token key not found");
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             var app = builder.Build();
 
@@ -42,7 +58,9 @@ namespace UABackbone_Backend
 
             app.UseAuthorization();
 
-
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.MapControllers();
 
             app.Run();
