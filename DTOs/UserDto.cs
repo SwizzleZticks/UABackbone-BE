@@ -4,6 +4,8 @@ namespace UABackbone_Backend.DTOs;
 
 public class UserDto
 {
+    [Required] 
+    public required ushort Id { get; set; }
     [Required]    
     public required string Username { get; set; } = null!;
     [Required]
@@ -13,7 +15,6 @@ public class UserDto
     [Required]
     public required string Email { get; set; } = null!;
     [Required]
-    public short Local { get; set; }
-    [Required]
+    public required short Local { get; set; }
     public string Token { get; set; } = null!;
 }

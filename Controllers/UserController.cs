@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UABackbone_Backend.DTOs;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
@@ -9,16 +10,41 @@ public class UserController(RailwayContext context) : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<LocalUnion>> GetUsersAsync()
     {
-        return Ok(await context.Users.ToListAsync());
+        var users = await context.Users.ToListAsync();
+        List<UserDto> userDtos = new List<UserDto>();
+
+        foreach (var user in users)
+        {
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Local = user.LocalId
+            };
+            userDtos.Add(userDto);
+        }
+        return Ok(userDtos);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> GetUserByIdAsync(int id)
+    public async Task<ActionResult<User>> GetUserByIdAsync(ushort id)
     {
         var user = await context.Users.FindAsync(id);
-        return user != null ? Ok(user) : NotFound();
+        
+        return user != null ? Ok(new UserDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Local = user.LocalId
+        }) : NotFound("User not found");
     }
 
     [HttpPut("{id}")]
@@ -30,13 +56,21 @@ public class UserController(RailwayContext context) : BaseApiController
         context.Update(aUser);
         await context.SaveChangesAsync();
 
-        return Ok(aUser);
+        return Ok(new UserDto
+        {
+            Id = aUser.Id,
+            Username = aUser.Username,
+            Email = aUser.Email,
+            FirstName = aUser.FirstName,
+            LastName = aUser.LastName,
+            Local = aUser.LocalId
+        });
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> DeleteUserAsync(int id)
+    public async Task<ActionResult<User>> DeleteUserAsync(ushort id)
     {
         var user = await context.Users.FindAsync(id);
 

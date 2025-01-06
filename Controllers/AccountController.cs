@@ -40,6 +40,7 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
 
         var userDto = new UserDto
         {
+            Id = user.Id,
             Username = registerDto.Username,
             FirstName = registerDto.FirstName,
             LastName = registerDto.LastName,
@@ -71,6 +72,7 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
         
         return new UserDto
         {
+            Id = user.Id,
             Username = user.Username,
             FirstName = user.FirstName,
             LastName = user.LastName,
