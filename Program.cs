@@ -20,6 +20,17 @@ namespace UABackbone_Backend
             
             builder.Services.AddApplicationServices(builder.Configuration); //W black hole
             builder.Services.AddIdentityServices(builder.Configuration); //another W black hole
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5001")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowAnyOrigin();
+                    });
+            });
             
             var app = builder.Build();
 
@@ -30,6 +41,7 @@ namespace UABackbone_Backend
                 app.UseSwaggerUI();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
