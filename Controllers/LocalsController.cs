@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UABackbone_Backend.Models;
+using UABackbone_Backend.DTOs;
 
 namespace UABackbone_Backend.Controllers;
 public class LocalsController(RailwayContext context) : BaseApiController
 {
-    //TODO
-    //Limit number of locals shown(possible start index and end index query)-list.getrange
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<LocalUnion>> GetLocalsAsync()
@@ -34,16 +33,33 @@ public class LocalsController(RailwayContext context) : BaseApiController
         return Created("api/Locals",newLocal);
     }
 
-    [HttpPut("{local}")]
+    [HttpPatch("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short local, [FromBody] LocalUnion aLocal)
+    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short local, [FromBody] LocalUnionDto aLocal)
     {
-        aLocal.Local = local;
-        context.Update(aLocal);
-        await context.SaveChangesAsync();
+        var queriedLocal = await context.LocalUnions.FindAsync(local);
+        if (queriedLocal == null)
+        {
+            return NotFound("Local not found");
+        }
         
-        return Ok(aLocal);
+        var dtoProperties = typeof(LocalUnionDto).GetProperties();
+        foreach (var prop in dtoProperties)
+        {
+            var value = prop.GetValue(aLocal);
+            if (value != null)
+            {
+                var entityProperty = queriedLocal.GetType().GetProperty(prop.Name);
+                if (entityProperty != null)
+                {
+                    entityProperty.SetValue(queriedLocal, value);
+                }
+            }
+        }
+        await context.SaveChangesAsync();
+
+        return Ok(queriedLocal);
     }
 
     [HttpDelete("{local}")]
