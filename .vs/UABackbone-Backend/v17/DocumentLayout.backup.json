@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Josh\\source\\UABackbone-Backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\josh\\source\\uabackbone-backend\\uabackbone-backend.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:uabackbone-backend.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\josh\\source\\uabackbone-backend\\controllers\\localscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\localscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -43,6 +47,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "UABackbone-Backend",
+              "DocumentMoniker": "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj",
+              "RelativeDocumentMoniker": "UABackbone-Backend.csproj",
+              "ToolTip": "C:\\Users\\Josh\\source\\UABackbone-Backend\\UABackbone-Backend.csproj",
+              "RelativeToolTip": "UABackbone-Backend.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-01-17T19:22:06.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "LocalsController.cs",
               "DocumentMoniker": "C:\\Users\\Josh\\source\\UABackbone-Backend\\Controllers\\LocalsController.cs",
               "RelativeDocumentMoniker": "Controllers\\LocalsController.cs",
@@ -50,12 +66,11 @@
               "RelativeToolTip": "Controllers\\LocalsController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-22T23:15:51.367Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-22T23:15:51.367Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Josh\\source\\UABackbone-Backend\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
