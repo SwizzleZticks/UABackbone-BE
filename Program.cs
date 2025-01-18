@@ -39,6 +39,7 @@ namespace UABackbone_Backend
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            
             app.Run();
         }
     }

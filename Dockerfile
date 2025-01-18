@@ -1,4 +1,4 @@
-# Use the official .NET SDK image to build the app
+# Use the official .NET SDK image to build the app (for .NET 9)
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
 # Set the working directory inside the container
@@ -12,9 +12,12 @@ RUN dotnet restore
 COPY . ./
 
 # Publish the application to a folder in the container
-RUN dotnet publish -c Release -r linux-x64 --self-contained false -o out
+RUN dotnet publish -c Release -o /app/out
 
-# Use the official .NET runtime image to run the app
+# Check the contents of the output directory
+RUN ls -la /app/out
+
+# Use the official .NET runtime image to run the app (for .NET 9)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 
 # Set the working directory in the final container
@@ -28,4 +31,3 @@ EXPOSE 8080
 
 # Set the entry point for the app
 ENTRYPOINT ["dotnet", "UABackbone-Backend.dll"]
-
