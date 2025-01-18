@@ -15,9 +15,8 @@ namespace UABackbone_Backend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
+
             // Add services to the container.
-            
             builder.Services.AddApplicationServices(builder.Configuration); //W black hole
             builder.Services.AddIdentityServices(builder.Configuration); //another W black hole
             builder.Services.AddCors(options =>
@@ -25,13 +24,13 @@ namespace UABackbone_Backend
                 options.AddDefaultPolicy(
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5001")
+                        policy.WithOrigins("http://localhost:5001", "http://localhost:8080")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowAnyOrigin();
                     });
             });
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -42,16 +41,13 @@ namespace UABackbone_Backend
             }
 
             app.UseCors();
-            app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
             app.UseAuthentication();
             app.UseAuthorization();
-            
-            app.MapControllers();
 
-            app.Run();
+            // Listen on port 80 inside the container
+            app.Run("http://0.0.0.0:80");
         }
+
     }
 }
