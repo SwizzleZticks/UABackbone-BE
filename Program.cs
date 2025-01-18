@@ -46,7 +46,8 @@ namespace UABackbone_Backend
             app.UseAuthorization();
 
             // Listen on port 80 inside the container
-            app.Run("http://0.0.0.0:80");
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+            app.Run($"http://0.0.0.0:{port}");
         }
 
     }
