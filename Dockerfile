@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 # Copy the project file and restore dependencies
-COPY *.csproj ./ 
+COPY . ./ 
 RUN dotnet restore
 
 # Copy the rest of the application code
@@ -13,6 +13,9 @@ COPY . ./
 
 # Publish the application to a folder in the container
 RUN dotnet publish -c Release -o /app/out
+RUN echo "Contents of /app after publish:" && ls -R /app
+RUN echo "Contents of /app/out after publish:" && ls -R /app/out
+
 
 # Check the contents of the output directory (add debugging)
 RUN ls -la /app/out || echo "Directory /app/out does not exist."
