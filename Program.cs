@@ -24,7 +24,7 @@ namespace UABackbone_Backend
                 options.AddDefaultPolicy(
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:8080")
+                        policy.WithOrigins("http://localhost:8080", "http://localhost:5001")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowAnyOrigin();
@@ -37,8 +37,13 @@ namespace UABackbone_Backend
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                    c.RoutePrefix = string.Empty;  // Access Swagger at the root URL
+                });
             }
+
 
             app.UseCors();
             app.UseAuthorization();
@@ -47,6 +52,7 @@ namespace UABackbone_Backend
 
             // Listen on port 80 inside the container
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            Console.WriteLine($"Listening on port {port}");
             app.Run($"http://0.0.0.0:{port}");
         }
 
