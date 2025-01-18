@@ -4,6 +4,8 @@ using UABackbone_Backend.Models;
 using UABackbone_Backend.DTOs;
 
 namespace UABackbone_Backend.Controllers;
+[ApiController]
+[Route("api/[controller]")]
 public class LocalsController(RailwayContext context) : BaseApiController
 {
     [HttpGet]
