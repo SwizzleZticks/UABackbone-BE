@@ -1,12 +1,5 @@
-
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using UABackbone_Backend.Extensions;
-using UABackbone_Backend.Interfaces;
-using UABackbone_Backend.Models;
-using UABackbone_Backend.Services;
+
 
 namespace UABackbone_Backend
 {
@@ -17,14 +10,14 @@ namespace UABackbone_Backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddApplicationServices(builder.Configuration); //W black hole
-            builder.Services.AddIdentityServices(builder.Configuration); //another W black hole
+            builder.Services.AddApplicationServices(builder.Configuration);
+            builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:8080", "https://uabackbone-be.up.railway.app:55014")
+                        policy.WithOrigins("http://localhost:5001")
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowAnyOrigin();
@@ -41,20 +34,12 @@ namespace UABackbone_Backend
             }
 
             app.UseCors();
+            app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapGet("/test", () => "Application is running!");
-            app.Use(async (context, next) =>
-            {
-                Console.WriteLine($"Request to: {context.Request.Path}");
-                await next.Invoke();
-            });
-            // Listen on port 80 inside the container
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-            Console.WriteLine($"Listening on port {port}");
-            app.Run($"http://0.0.0.0:{port}");
+            app.MapControllers();
+            app.Run();
         }
-
     }
 }
