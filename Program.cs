@@ -45,6 +45,11 @@ namespace UABackbone_Backend
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapGet("/test", () => "Application is running!");
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine($"Request to: {context.Request.Path}");
+                await next.Invoke();
+            });
             // Listen on port 80 inside the container
             var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
             Console.WriteLine($"Listening on port {port}");
