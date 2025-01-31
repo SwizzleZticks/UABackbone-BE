@@ -8,7 +8,7 @@ public class UserController(RailwayContext context) : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<LocalUnion>> GetUsersAsync()
+    public async Task<ActionResult<UserDto>> GetUsersAsync()
     {
         var users = await context.Users.ToListAsync();
         List<UserDto> userDtos = new List<UserDto>();
@@ -50,7 +50,7 @@ public class UserController(RailwayContext context) : BaseApiController
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> UpdateUserAsync([FromBody] User aUser, ushort id)
+    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, ushort id)
     {
         aUser.Id = id;
         context.Update(aUser);
