@@ -8,7 +8,33 @@ public class UserController(RailwayContext context) : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<UserDto>> GetUsersAsync()
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
+    {
+        var users = await context.Users
+            .Skip((page - 1) * limitSize)
+            .Take(limitSize)
+            .ToListAsync();
+        List<UserDto> userDtos = new List<UserDto>();
+
+        foreach (var user in users)
+        {
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Local = user.LocalId
+            };
+            userDtos.Add(userDto);
+        }
+        return Ok(userDtos);
+    }
+    
+    [HttpGet("all")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<UserDto>> GetAllUsersAsync()
     {
         var users = await context.Users.ToListAsync();
         List<UserDto> userDtos = new List<UserDto>();
