@@ -19,8 +19,8 @@ namespace UABackbone_Backend
                     {
                         policy.WithOrigins("http://localhost:5001", "http://uabackbone-be.up.railway.app")
                             .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowAnyOrigin();
+                            .AllowAnyHeader();
+                        //.AllowAnyOrigin();
                     });
             });
 
