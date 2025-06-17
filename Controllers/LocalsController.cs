@@ -6,11 +6,23 @@ using UABackbone_Backend.DTOs;
 namespace UABackbone_Backend.Controllers;
 public class LocalsController(RailwayContext context) : BaseApiController
 {
-    [HttpGet]
+    [HttpGet("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<LocalUnion>> GetLocalsAsync()
     {
         return Ok(await context.LocalUnions.ToListAsync());
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<LocalUnion>>> GetLocalPaginationAsync(int page = 1, int limitSize = 25)
+    {
+        var locals = await context.LocalUnions
+            .Skip((page - 1) * limitSize)
+            .Take(limitSize)
+            .ToListAsync();
+        
+        return Ok(locals);
     }
 
     [HttpGet("{local}")]
