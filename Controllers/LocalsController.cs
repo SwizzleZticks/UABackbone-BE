@@ -8,14 +8,34 @@ public class LocalsController(RailwayContext context) : BaseApiController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<LocalUnion>>> GetLocalPaginationAsync(int page = 1, int limitSize = 25)
+    public async Task<ActionResult<PagedResultDto<LocalUnion>>> GetLocalPaginationAsync(
+        int page = 1,
+        int limitSize = 25,
+        string? searchTerm = null)
     {
-        var locals = await context.LocalUnions
+        var query = context.LocalUnions.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var normalized = searchTerm.Trim().ToLower();
+
+            query = query.Where(l =>
+                l.Local.ToString().Contains(normalized) ||
+                l.Location.ToLower().Contains(normalized));
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var locals = await query
             .Skip((page - 1) * limitSize)
             .Take(limitSize)
             .ToListAsync();
-        
-        return Ok(locals);
+
+        return Ok(new PagedResultDto<LocalUnion>
+        {
+            Total = totalCount,
+            Items = locals
+        });
     }
     
     [HttpGet("all")]
