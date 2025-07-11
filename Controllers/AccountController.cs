@@ -12,6 +12,12 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<UserDto>> RegisterAsync([FromBody]RegisterDto registerDto)
     {
+        
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         if (await UserExistsAsync(registerDto.Username))
         {
             return BadRequest("Username is taken");
@@ -21,7 +27,8 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
         {
             return BadRequest("Email is taken");
         }
-    
+        
+        
         var user = new User
         {
             Username = registerDto.Username.ToLower(),
@@ -80,6 +87,29 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
             Local = user.LocalId,
             Token = tokenService.CreateToken(user)
         };
+    }
+
+    [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto dto)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == dto.Email.ToLower());
+
+        if (user == null)
+        {
+            return BadRequest("Email does not exist");
+        }
+        
+        var token = tokenService.CreateToken(user, 1, "reset");
+        
+        user.PasswordResetToken = token;
+        user.PasswordResetTokenExpires = DateTime.UtcNow.AddHours(1);
+        
+        var resetLink = $"https://localhost:4200/auth/reset-password?token={token}";
+        
+        //await emailService.SendResetLink(user.Email, resetLink);
+        
+        return Ok("Password reset link sent.");
     }
     
     private async Task<bool> UserExistsAsync(string username)

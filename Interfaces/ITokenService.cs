@@ -4,5 +4,5 @@ namespace UABackbone_Backend.Interfaces;
 
 public interface ITokenService
 {
-    string CreateToken(User aUser);
+    string CreateToken(User aUser, int hoursUntilExpiration = 24, string purpose = "auth");
 }

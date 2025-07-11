@@ -26,4 +26,7 @@ public partial class User
     public required bool IsBlacklisted { get; set; }
 
     public virtual LocalUnion Local { get; set; } = null!;
+    
+    public string? PasswordResetToken { get; set; }
+    public DateTime? PasswordResetTokenExpires { get; set; }
 }

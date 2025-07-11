@@ -13,6 +13,7 @@ public class RegisterDto
     [Required]
     public required string LastName { get; set; } = null!;
     [Required]
+    [EmailAddress(ErrorMessage = "Invalid email format.")]
     public required string Email { get; set; } = null!;
     [Required]
     public short Local { get; set; }
