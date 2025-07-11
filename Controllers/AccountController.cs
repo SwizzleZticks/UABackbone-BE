@@ -56,11 +56,11 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> LoginAsync([FromBody] LoginDto loginDto)
     {
-        var user = await context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == loginDto.UserName.ToLower());
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
 
         if (user == null)
         {
-            return Unauthorized("Username does not exist");
+            return Unauthorized("Email does not exist");
         }
 
         var password = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
