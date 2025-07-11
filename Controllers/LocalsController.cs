@@ -45,6 +45,19 @@ public class LocalsController(RailwayContext context) : BaseApiController
         return Ok(await context.LocalUnions.ToListAsync());
     }
 
+    [HttpGet("register-options")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> RegisterOptionsAsync()
+    {
+        var locals = await context.LocalUnions.Select(u => new
+        {
+            u.Local, u.Location
+        }).ToListAsync();
+        
+        return Ok(locals);
+    }
+    
+
     [HttpGet("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

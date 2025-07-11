@@ -9,7 +9,7 @@ namespace UABackbone_Backend.Services;
 
 public class TokenService(IConfiguration config) : ITokenService
 {
-    public string CreateToken(User aUser)
+    public string CreateToken(User aUser, int hoursUntilExpiration = 24, string purpose = "auth")
     {
         var tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY") ?? throw new Exception("Cannot access Token Key");
 
@@ -22,7 +22,8 @@ public class TokenService(IConfiguration config) : ITokenService
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, aUser.Username)
+            new Claim(ClaimTypes.NameIdentifier, aUser.Username),
+            new Claim("token_type", purpose)
         };
         
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -30,7 +31,7 @@ public class TokenService(IConfiguration config) : ITokenService
         var descriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddHours(hoursUntilExpiration),
             SigningCredentials = credentials
         };
 
