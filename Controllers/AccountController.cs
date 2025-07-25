@@ -6,7 +6,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
 
-public class AccountController(RailwayContext context, ITokenService tokenService) : BaseApiController
+public class AccountController(RailwayContext context, IEmailService emailService ,ITokenService tokenService) : BaseApiController
 {
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -107,7 +107,7 @@ public class AccountController(RailwayContext context, ITokenService tokenServic
         
         var resetLink = $"https://localhost:4200/auth/reset-password?token={token}";
         
-        //await emailService.SendResetLink(user.Email, resetLink);
+        await emailService.SendResetLinkAsync(user.Email, user.FirstName ,resetLink);
         
         return Ok("Password reset link sent.");
     }
