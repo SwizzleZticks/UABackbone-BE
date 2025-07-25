@@ -105,6 +105,8 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         user.PasswordResetToken = token;
         user.PasswordResetTokenExpires = DateTime.UtcNow.AddHours(1);
         
+        await context.SaveChangesAsync();
+        
         var resetLink = $"https://localhost:4200/auth/reset-password?token={token}";
         
         await emailService.SendResetLinkAsync(user.Email, user.FirstName, resetLink);
