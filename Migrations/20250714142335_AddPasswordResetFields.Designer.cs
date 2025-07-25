@@ -12,8 +12,8 @@ using UABackbone_Backend.Models;
 namespace UABackbone_Backend.Migrations
 {
     [DbContext(typeof(RailwayContext))]
-    [Migration("20250711130532_InitialBaseline")]
-    partial class InitialBaseline
+    [Migration("20250714142335_AddPasswordResetFields")]
+    partial class AddPasswordResetFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

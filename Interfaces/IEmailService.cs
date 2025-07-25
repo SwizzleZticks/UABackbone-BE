@@ -2,5 +2,5 @@ namespace UABackbone_Backend.Interfaces;
 
 public interface IEmailService
 {
-    Task SendResetLink(string toEmail, string resetLink);
+    Task<HttpResponseMessage> SendResetLinkAsync(string email, string name, string resetLink);
 }
