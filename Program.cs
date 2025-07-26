@@ -27,6 +27,7 @@ namespace UABackbone_Backend
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+            app.UseDeveloperExceptionPage(); // Only use in dev
 
             app.UseSwagger(); 
             app.UseSwaggerUI();
