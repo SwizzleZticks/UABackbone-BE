@@ -111,7 +111,7 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         
         await emailService.SendResetLinkAsync(user.Email, user.FirstName, resetLink);
         
-        return Ok("Password reset link sent.");
+        return Ok(new { message = "Password reset link sent."});
     }
     
     private async Task<bool> UserExistsAsync(string username)
