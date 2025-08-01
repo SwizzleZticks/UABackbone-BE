@@ -73,6 +73,38 @@ public class UserController(RailwayContext context) : BaseApiController
         }) : NotFound("User not found");
     }
 
+    [HttpGet("check-username")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CheckUsernameAsync([FromQuery]string username)
+    {
+        bool isTaken = await context.Users.AnyAsync(u => u.Username == username);
+
+        if (string.IsNullOrWhiteSpace("username"))
+        {
+            return BadRequest("Username field is required");
+        }
+        
+        return isTaken ? Ok() : NotFound();
+    }
+
+    [HttpGet("check-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CheckEmailAsync([FromQuery]string email)
+    {
+        bool isTaken = await context.Users.AnyAsync(u => u.Email == email);
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest("Email field is required");
+        }
+        
+        return isTaken ? Ok() : NotFound();
+    }
+
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
