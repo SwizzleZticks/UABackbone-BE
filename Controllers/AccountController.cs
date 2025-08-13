@@ -10,9 +10,11 @@ public class AccountController(RailwayContext context, IEmailService emailServic
 {
     [HttpPost("verify/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<UserDto>> VerifyUserAsync([FromBody]ushort id)
+    public async Task<ActionResult<UserDto>> VerifyUserAsync(ushort id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
+        
+        if (pendingUser == null) return NotFound();
         
         var user = new User
         {
