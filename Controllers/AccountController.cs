@@ -8,55 +8,92 @@ namespace UABackbone_Backend.Controllers;
 
 public class AccountController(RailwayContext context, IEmailService emailService ,ITokenService tokenService) : BaseApiController
 {
-    [HttpPost("register")]
+    [HttpPost("verify/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<UserDto>> RegisterAsync([FromBody]RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> VerifyUserAsync([FromBody]ushort id)
     {
-        
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-        
-        if (await UserExistsAsync(registerDto.Username))
-        {
-            return BadRequest("Username is taken");
-        }
-
-        if (await EmailExistsAsync(registerDto.Email))
-        {
-            return BadRequest("Email is taken");
-        }
-        
+        var pendingUser = await context.PendingUsers.FindAsync(id);
         
         var user = new User
         {
-            Username = registerDto.Username.ToLower(),
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            Email = registerDto.Email,
-            IsVerified = false,
+            Username = pendingUser.Username.ToLower(),
+            PasswordHash = pendingUser.PasswordHash,
+            FirstName = pendingUser.FirstName,
+            LastName = pendingUser.LastName,
+            Email = pendingUser.Email,
+            IsVerified = true,
             IsAdmin = false,
             IsBlacklisted = false,
-            LocalId = registerDto.Local
+            LocalId = pendingUser.Local
         };
-    
+        
+        context.PendingUsers.Remove(pendingUser);
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
         var userDto = new UserDto
         {
             Id = user.Id,
-            Username = registerDto.Username,
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            Email = registerDto.Email,
-            Local = registerDto.Local,
+            Username = user.Username,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Local = user.LocalId,
             Token = tokenService.CreateToken(user)
         };
 
-        return Created("api/Account/register",userDto);
+        return Created("api/Account/verify",userDto);
+    }
+    
+    [HttpPost("register-pending")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<ActionResult<PendingUser>> PendingCreationAsync([FromForm]RegisterDto dto, IFormFile uaCard)
+    {
+         
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
+        if (await UserExistsAsync(dto.Username))
+        {
+            return BadRequest("Username is taken");
+        }
+
+        if (await EmailExistsAsync(dto.Email))
+        {
+            return BadRequest("Email is taken");
+        }
+        
+        using var ms = new MemoryStream();
+        await uaCard.CopyToAsync(ms);
+        
+        var pendingUser = new PendingUser()
+        {
+            Username = dto.Username,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+            Local = dto.Local,
+            UaCardImage = ms.ToArray(),
+            SubmittedAt = DateTime.Now
+        };
+        
+        context.PendingUsers.Add(pendingUser);
+        await context.SaveChangesAsync();
+
+        var userDto = new UserDto()
+        {
+            Id = pendingUser.Id,
+            Username = pendingUser.Username,
+            FirstName = pendingUser.FirstName,
+            LastName = pendingUser.LastName,
+            Email = pendingUser.Email,
+            Local = pendingUser.Local,
+        };
+
+        return Created("api/Account/register-pending", userDto);
     }
 
     [HttpPost("login")]
@@ -131,14 +168,29 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         
         return Ok(new  { message = "Password has been successfully reset."});
     }
+
+    [HttpGet("pending-users/{id}/uacard")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUaCardAsync(ushort id)
+    {
+        var user =  await context.PendingUsers.FindAsync(id);
+        if (user is null)
+        {
+            return NotFound();
+        }
+        
+        return File(user.UaCardImage, "image/jpeg");
+    }
     
     private async Task<bool> UserExistsAsync(string username)
     {
-        return await context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower());
+        return await context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()) ||
+               await context.PendingUsers.AnyAsync(p => p.Email.ToLower() == username.ToLower());
     }
     
     private async Task<bool> EmailExistsAsync(string email)
     {
-        return await context.Users.AnyAsync(u => u.Email == email);
+        return await context.Users.AnyAsync(u => u.Email == email) ||
+               await context.PendingUsers.AnyAsync(p => p.Email == email);;
     }
 }

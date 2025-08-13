@@ -14,6 +14,7 @@ public partial class RailwayContext : DbContext
     public virtual DbSet<LocalUnion> LocalUnions { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<PendingUser> PendingUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
