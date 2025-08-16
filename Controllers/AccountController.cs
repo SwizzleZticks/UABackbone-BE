@@ -13,86 +13,101 @@ public class AccountController(RailwayContext context, IEmailService emailServic
     public async Task<ActionResult<UserDto>> VerifyUserAsync(ushort id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
-        
         if (pendingUser == null) return NotFound();
-        
+
         var user = new User
         {
-            Username = pendingUser.Username.ToLower(),
-            PasswordHash = pendingUser.PasswordHash,
-            FirstName = pendingUser.FirstName,
-            LastName = pendingUser.LastName,
-            Email = pendingUser.Email,
-            IsVerified = true,
-            IsAdmin = false,
+            Username    = pendingUser.Username.Trim().ToLowerInvariant(),
+            PasswordHash= pendingUser.PasswordHash,
+            FirstName   = pendingUser.FirstName?.Trim(),
+            LastName    = pendingUser.LastName?.Trim(),
+            Email       = pendingUser.Email.Trim().ToLowerInvariant(),
+            IsVerified  = true,
+            IsAdmin     = false,
             IsBlacklisted = false,
-            LocalId = pendingUser.Local
+            LocalId     = pendingUser.Local
         };
-        
+
         context.PendingUsers.Remove(pendingUser);
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
+        await emailService.SendApprovedAsync(user.Email, user.FirstName ?? "");
+
         var userDto = new UserDto
         {
-            Id = user.Id,
-            Username = user.Username,
+            Id        = user.Id,
+            Username  = user.Username,
             FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Local = user.LocalId,
-            Token = tokenService.CreateToken(user)
+            LastName  = user.LastName,
+            Email     = user.Email,
+            Local     = user.LocalId,
+            Token     = tokenService.CreateToken(user)
         };
 
-        return Created("api/Account/verify",userDto);
+        return Created("api/Account/verify", userDto);
     }
     
     [HttpPost("register-pending")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<PendingUser>> PendingCreationAsync([FromForm]RegisterDto dto, IFormFile uaCard)
+    public async Task<ActionResult<PendingUser>> PendingCreationAsync([FromForm] RegisterDto dto, IFormFile uaCard)
     {
-         
         if (!ModelState.IsValid)
-        {
             return BadRequest(ModelState);
-        }
+
+        // Basic upload guards
+        if (uaCard is null || uaCard.Length == 0)
+            return BadRequest("UA card image is required.");
+
+        const long maxBytes = 5_000_000; // 5 MB
+        if (uaCard.Length > maxBytes)
+            return BadRequest("UA card image must be 5 MB or smaller.");
+
+        var allowed = new[] { "image/jpeg", "image/png", "image/webp" };
+        if (!allowed.Contains(uaCard.ContentType))
+            return BadRequest("Only JPEG, PNG, or WEBP images are allowed.");
         
-        if (await UserExistsAsync(dto.Username))
-        {
+        var normalizedUsername = dto.Username?.Trim().ToLowerInvariant();
+        var normalizedEmail    = dto.Email?.Trim().ToLowerInvariant();
+
+        if (await UserExistsAsync(normalizedUsername))
             return BadRequest("Username is taken");
+
+        if (await EmailExistsAsync(normalizedEmail))
+            return BadRequest("Email is taken");
+        
+        byte[] imageBytes;
+        using (var ms = new MemoryStream())
+        {
+            await uaCard.CopyToAsync(ms);
+            imageBytes = ms.ToArray();
         }
 
-        if (await EmailExistsAsync(dto.Email))
+        var pendingUser = new PendingUser
         {
-            return BadRequest("Email is taken");
-        }
-        
-        using var ms = new MemoryStream();
-        await uaCard.CopyToAsync(ms);
-        
-        var pendingUser = new PendingUser()
-        {
-            Username = dto.Username,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Email = dto.Email,
-            Local = dto.Local,
-            UaCardImage = ms.ToArray(),
-            SubmittedAt = DateTime.Now
+            Username   = normalizedUsername,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password?.Trim()),
+            FirstName  = dto.FirstName?.Trim(),
+            LastName   = dto.LastName?.Trim(),
+            Email      = normalizedEmail,
+            Local      = dto.Local,
+            UaCardImage = imageBytes,          // consider object storage later
+            SubmittedAt = DateTime.UtcNow
         };
-        
+
         context.PendingUsers.Add(pendingUser);
         await context.SaveChangesAsync();
 
-        var userDto = new UserDto()
+        await emailService.SendPendingAsync(pendingUser.Email, pendingUser.FirstName ?? "");
+
+        var userDto = new UserDto
         {
-            Id = pendingUser.Id,
-            Username = pendingUser.Username,
+            Id        = pendingUser.Id,
+            Username  = pendingUser.Username,
             FirstName = pendingUser.FirstName,
-            LastName = pendingUser.LastName,
-            Email = pendingUser.Email,
-            Local = pendingUser.Local,
+            LastName  = pendingUser.LastName,
+            Email     = pendingUser.Email,
+            Local     = pendingUser.Local,
         };
 
         return Created("api/Account/register-pending", userDto);
