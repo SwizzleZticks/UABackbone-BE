@@ -169,13 +169,21 @@ public class AccountController(RailwayContext context, IEmailService emailServic
     }
 
     [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto dto)
     {
         var user = await context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == dto.Token);
 
-        if (user == null || user.PasswordResetTokenExpires < DateTime.UtcNow)
+        if (user == null)
         {
-            return BadRequest("No user found or reset token has expired");
+            return BadRequest("No user found");
+        }
+
+        if (user.PasswordResetTokenExpires < DateTime.UtcNow)
+        {
+            return Unauthorized("Password reset expired");
         }
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
