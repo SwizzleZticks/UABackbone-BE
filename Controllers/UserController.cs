@@ -14,22 +14,29 @@ public class UserController(RailwayContext context) : BaseApiController
             .Skip((page - 1) * limitSize)
             .Take(limitSize)
             .ToListAsync();
-        List<UserDto> userDtos = new List<UserDto>();
+        var userDtos = ConvertToUserDtos(users);
 
-        foreach (var user in users)
-        {
-            var userDto = new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Local = user.LocalId
-            };
-            userDtos.Add(userDto);
-        }
         return Ok(userDtos);
+    }
+
+    [HttpGet("all-pending")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<PendingUser>> GetAllPendingUsersAsync()
+    {
+        var pendingUsers = await context.PendingUsers.ToListAsync();
+        var pendingUserDtos = (from pendingUser in pendingUsers
+            let pendingUserDto = new UserDto
+            {
+                Id = pendingUser.Id,
+                Username = pendingUser.Username,
+                Email = pendingUser.Email,
+                FirstName = pendingUser.FirstName,
+                LastName = pendingUser.LastName,
+                Local = pendingUser.Local
+            }
+            select pendingUser).ToList();
+
+        return Ok(pendingUserDtos);
     }
     
     [HttpGet("all")]
@@ -37,21 +44,8 @@ public class UserController(RailwayContext context) : BaseApiController
     public async Task<ActionResult<UserDto>> GetAllUsersAsync()
     {
         var users = await context.Users.ToListAsync();
-        List<UserDto> userDtos = new List<UserDto>();
-
-        foreach (var user in users)
-        {
-            var userDto = new UserDto
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Local = user.LocalId
-            };
-            userDtos.Add(userDto);
-        }
+        var userDtos = ConvertToUserDtos(users);
+        
         return Ok(userDtos);
     }
 
@@ -140,5 +134,26 @@ public class UserController(RailwayContext context) : BaseApiController
         await context.SaveChangesAsync();
         
         return NoContent();
+    }
+
+    private List<UserDto> ConvertToUserDtos(List<User> users)
+    {
+        var userDtos = new List<UserDto>();
+        
+        foreach (var user in users)
+        {
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Local = user.LocalId
+            };
+            userDtos.Add(userDto);
+        }
+        
+        return userDtos;
     }
 }
