@@ -206,6 +206,23 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         return File(user.UaCardImage, "image/jpeg");
     }
     
+    [HttpDelete("pending-users/{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<User>> DeletePendingUserAsync(ushort id)
+    {
+        var user = await context.PendingUsers.FindAsync(id);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+        context.PendingUsers.Remove(user);
+        await context.SaveChangesAsync();
+        
+        return NoContent();
+    }
+    
     private async Task<bool> UserExistsAsync(string username)
     {
         return await context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()) ||
