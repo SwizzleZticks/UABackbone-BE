@@ -50,7 +50,7 @@ public class AccountController(RailwayContext context, IEmailService emailServic
     
     [HttpPost("register-pending")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<PendingUser>> PendingCreationAsync([FromForm] RegisterDto dto, IFormFile uaCard)
+    public async Task<ActionResult<PendingUserDto>> PendingCreationAsync([FromForm] RegisterDto dto, IFormFile uaCard)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -100,17 +100,16 @@ public class AccountController(RailwayContext context, IEmailService emailServic
 
         await emailService.SendPendingAsync(pendingUser.Email, pendingUser.FirstName ?? "");
 
-        var userDto = new UserDto
+        var pendingUserDto = new PendingUserDto
         {
             Id        = pendingUser.Id,
             Username  = pendingUser.Username,
-            FirstName = pendingUser.FirstName,
-            LastName  = pendingUser.LastName,
             Email     = pendingUser.Email,
             Local     = pendingUser.Local,
+            SubmittedAt = DateTime.UtcNow
         };
 
-        return Created("api/Account/register-pending", userDto);
+        return Created("api/Account/register-pending", pendingUserDto);
     }
 
     [HttpPost("login")]
