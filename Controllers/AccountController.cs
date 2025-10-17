@@ -17,15 +17,15 @@ public class AccountController(RailwayContext context, IEmailService emailServic
 
         var user = new User
         {
-            Username    = pendingUser.Username.Trim().ToLowerInvariant(),
-            PasswordHash= pendingUser.PasswordHash,
-            FirstName   = pendingUser.FirstName?.Trim(),
-            LastName    = pendingUser.LastName?.Trim(),
-            Email       = pendingUser.Email.Trim().ToLowerInvariant(),
-            IsVerified  = true,
-            IsAdmin     = false,
+            Username = pendingUser.Username.Trim().ToLowerInvariant(),
+            PasswordHash = pendingUser.PasswordHash,
+            FirstName = pendingUser.FirstName?.Trim(),
+            LastName = pendingUser.LastName?.Trim(),
+            Email = pendingUser.Email.Trim().ToLowerInvariant(),
+            IsVerified = true,
+            IsAdmin = false,
             IsBlacklisted = false,
-            LocalId     = pendingUser.Local
+            LocalId = pendingUser.Local
         };
 
         context.PendingUsers.Remove(pendingUser);
@@ -98,7 +98,8 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         context.PendingUsers.Add(pendingUser);
         await context.SaveChangesAsync();
 
-        await emailService.SendPendingAsync(pendingUser.Email, pendingUser.FirstName ?? "");
+        var mailResp = await emailService.SendPendingAsync(pendingUser.Email, pendingUser.FirstName ?? "");
+        Console.WriteLine($"PENDING EMAIL STATUS {(int)mailResp.StatusCode}");
 
         var pendingUserDto = new PendingUserDto
         {

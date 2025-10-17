@@ -25,29 +25,37 @@ public class EmailService(HttpClient client) : IEmailService
 
         return await ComposeAndSendAsync(toEmail, toName, subject, text, html);
     }
-    
+
     private async Task<HttpResponseMessage> ComposeAndSendAsync(
-        string toEmail,
-        string toName,
-        string subject,
-        string text,
-        string html)
+    string toEmail, string toName, string subject, string text, string html)
     {
         var emailDto = new SendEmailDto
         {
-            From = new EmailContactDto { Email = "noreply@uabackbone.com", Name = "UA Backbone" },
-            To = new List<EmailContactDto> { new EmailContactDto { Email = toEmail, Name = toName } },
+            From = new EmailContactDto { Email = GetFromEmail(), Name = GetFromName() },
+            To = new List<EmailContactDto> {
+            new EmailContactDto { Email = toEmail, Name = toName ?? string.Empty } // <- guard null
+        },
             Subject = subject,
             Text = text,
             Html = html
         };
 
-        var emailJson = JsonSerializer.Serialize(emailDto);
-        var httpContent = new StringContent(emailJson, Encoding.UTF8, "application/json");
-        return await client.PostAsync("email", httpContent);
+        var json = JsonSerializer.Serialize(emailDto); // attributes already handle casing
+        var resp = await client.PostAsync("email", new StringContent(json, Encoding.UTF8, "application/json"));
+
+        if (!resp.IsSuccessStatusCode)
+        {
+            var body = await resp.Content.ReadAsStringAsync();
+            Console.WriteLine($"MAILERSEND FAIL {(int)resp.StatusCode}: {body}");
+        }
+        return resp;
     }
-    
-   public Task<HttpResponseMessage> SendResetLinkAsync(string email, string firstName, string resetLink)
+
+    static string GetFromEmail() => Environment.GetEnvironmentVariable("MAIL_FROM") ?? "noreply@uabackbone.com";
+    static string GetFromName() => Environment.GetEnvironmentVariable("MAIL_FROM_NAME") ?? "UA Backbone";
+
+
+    public Task<HttpResponseMessage> SendResetLinkAsync(string email, string firstName, string resetLink)
     {
         const string subject = "Password Reset Request";
         var text = $@"Hello {firstName},
