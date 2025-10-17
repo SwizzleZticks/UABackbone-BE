@@ -74,7 +74,7 @@ public class UserController(RailwayContext context) : BaseApiController
     public async Task<IActionResult> CheckUsernameAsync([FromQuery]string username)
     {
         bool isTaken = await context.Users.AnyAsync(u => u.Username == username)
-                       | await context.PendingUsers.AnyAsync(u => u.Username == username);
+                    || await context.PendingUsers.AnyAsync(u => u.Username == username);
 
         if (string.IsNullOrWhiteSpace(username))
         {
