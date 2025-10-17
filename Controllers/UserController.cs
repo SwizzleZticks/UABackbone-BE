@@ -73,9 +73,10 @@ public class UserController(RailwayContext context) : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CheckUsernameAsync([FromQuery]string username)
     {
-        bool isTaken = await context.Users.AnyAsync(u => u.Username == username);
+        bool isTaken = await context.Users.AnyAsync(u => u.Username == username)
+                       | await context.PendingUsers.AnyAsync(u => u.Username == username);
 
-        if (string.IsNullOrWhiteSpace("username"))
+        if (string.IsNullOrWhiteSpace(username))
         {
             return BadRequest("Username field is required");
         }
@@ -89,7 +90,8 @@ public class UserController(RailwayContext context) : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CheckEmailAsync([FromQuery]string email)
     {
-        bool isTaken = await context.Users.AnyAsync(u => u.Email == email);
+        bool isTaken = await context.Users.AnyAsync(e => e.Email == email)
+                    || await context.PendingUsers.AnyAsync(e => e.Email == email);
 
         if (string.IsNullOrWhiteSpace(email))
         {
