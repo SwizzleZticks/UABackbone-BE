@@ -223,16 +223,19 @@ public class AccountController(RailwayContext context, IEmailService emailServic
         
         return NoContent();
     }
-    
+
     private async Task<bool> UserExistsAsync(string username)
     {
-        return await context.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()) ||
-               await context.PendingUsers.AnyAsync(p => p.Email.ToLower() == username.ToLower());
+        var u = username.Trim().ToLowerInvariant();
+        return await context.Users.AnyAsync(x => x.Username.ToLower() == u) ||
+               await context.PendingUsers.AnyAsync(x => x.Username.ToLower() == u);
     }
-    
+
     private async Task<bool> EmailExistsAsync(string email)
     {
-        return await context.Users.AnyAsync(u => u.Email == email) ||
-               await context.PendingUsers.AnyAsync(p => p.Email == email);;
+        var e = email.Trim().ToLowerInvariant();
+        return await context.Users.AnyAsync(x => x.Email.ToLower() == e) ||
+               await context.PendingUsers.AnyAsync(x => x.Email.ToLower() == e);
     }
+
 }
