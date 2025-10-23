@@ -19,13 +19,21 @@ public class TokenService(IConfiguration config) : ITokenService
         }
         
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+        var claims = new List<Claim>();
 
-        var claims = new List<Claim>
+        if (aUser.IsAdmin)
         {
-            new Claim(ClaimTypes.NameIdentifier, aUser.Username),
-            new Claim("token_type", purpose)
-        };
-        
+            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+        }
+        else
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "User"));
+        }
+
+        claims.Add(new Claim(ClaimTypes.Sid, aUser.Id.ToString()));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, aUser.Username));
+        claims.Add(new Claim("token_type", purpose));
+
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
         
         var descriptor = new SecurityTokenDescriptor
