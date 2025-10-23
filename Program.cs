@@ -13,6 +13,7 @@ namespace UABackbone_Backend
             builder.Services.AddApplicationServices(builder.Configuration);
             builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddEmailService();
+            builder.Services.AddIdentityService();
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

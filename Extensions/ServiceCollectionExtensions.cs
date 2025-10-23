@@ -21,4 +21,10 @@ public static class ServiceCollectionExtensions
         
         return services;
     }
+
+    public static IServiceCollection AddIdentityService(this IServiceCollection services)
+    {
+        services.AddScoped<IIdentityService, IdentityService>();
+        return services;
+    }
 }
