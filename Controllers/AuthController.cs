@@ -58,14 +58,14 @@ namespace UABackbone_Backend.Controllers
 
             var pendingUser = new PendingUser
             {
-                Username = normalizedUsername,
+                Username     = normalizedUsername,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password?.Trim()),
-                FirstName = dto.FirstName?.Trim(),
-                LastName = dto.LastName?.Trim(),
-                Email = normalizedEmail,
-                Local = dto.Local,
-                UaCardImage = imageBytes,          // consider object storage later
-                SubmittedAt = DateTime.UtcNow
+                FirstName    = dto.FirstName?.Trim(),
+                LastName     = dto.LastName?.Trim(),
+                Email        = normalizedEmail,
+                Local        = dto.Local,
+                UaCardImage  = imageBytes,          // consider object storage later
+                SubmittedAt  = DateTime.UtcNow
             };
 
             context.PendingUsers.Add(pendingUser);
@@ -76,10 +76,10 @@ namespace UABackbone_Backend.Controllers
 
             var pendingUserDto = new PendingUserDto
             {
-                Id = pendingUser.Id,
-                Username = pendingUser.Username,
-                Email = pendingUser.Email,
-                Local = pendingUser.Local,
+                Id          = pendingUser.Id,
+                Username    = pendingUser.Username,
+                Email       = pendingUser.Email,
+                Local       = pendingUser.Local,
                 SubmittedAt = DateTime.UtcNow
             };
 
@@ -106,13 +106,13 @@ namespace UABackbone_Backend.Controllers
 
             return new UserDto
             {
-                Id = user.Id,
-                Username = user.Username,
+                Id        = user.Id,
+                Username  = user.Username,
                 FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Local = user.LocalId,
-                Token = tokenService.CreateToken(user)
+                LastName  = user.LastName,
+                Email     = user.Email,
+                Local     = user.LocalId,
+                Token     = tokenService.CreateToken(user)
             };
         }
 

@@ -10,22 +10,22 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 {
     [HttpPost("verify/{id}/approve")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<UserDto>> VerifyUserAsync(ushort id)
+    public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
         if (pendingUser == null) return NotFound();
 
         var user = new User
         {
-            Username = pendingUser.Username.Trim().ToLowerInvariant(),
-            PasswordHash = pendingUser.PasswordHash,
-            FirstName = pendingUser.FirstName?.Trim(),
-            LastName = pendingUser.LastName?.Trim(),
-            Email = pendingUser.Email.Trim().ToLowerInvariant(),
-            IsVerified = true,
-            IsAdmin = false,
+            Username      = pendingUser.Username.Trim().ToLowerInvariant(),
+            PasswordHash  = pendingUser.PasswordHash,
+            FirstName     = pendingUser.FirstName?.Trim(),
+            LastName      = pendingUser.LastName?.Trim(),
+            Email         = pendingUser.Email.Trim().ToLowerInvariant(),
+            IsVerified    = true,
+            IsAdmin       = false,
             IsBlacklisted = false,
-            LocalId = pendingUser.Local
+            LocalId       = pendingUser.Local
         };
 
         context.PendingUsers.Remove(pendingUser);
@@ -50,7 +50,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     
     [HttpGet("pending-users/{id}/uacard")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUaCardAsync(ushort id)
+    public async Task<IActionResult> GetUaCardAsync(int id)
     {
         var user =  await context.PendingUsers.FindAsync(id);
         if (user is null)
@@ -64,7 +64,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [HttpDelete("pending-users/{id}/reject")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> DeletePendingUserAsync(ushort id)
+    public async Task<ActionResult<User>> DeletePendingUserAsync(int id)
     {
         var user = await context.PendingUsers.FindAsync(id);
 
@@ -99,12 +99,12 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         var pendingUserDtos = (from pendingUser in pendingUsers
                                let pendingUserDto = new UserDto
                                {
-                                   Id = pendingUser.Id,
-                                   Username = pendingUser.Username,
-                                   Email = pendingUser.Email,
+                                   Id        = pendingUser.Id,
+                                   Username  = pendingUser.Username,
+                                   Email     = pendingUser.Email,
                                    FirstName = pendingUser.FirstName,
-                                   LastName = pendingUser.LastName,
-                                   Local = pendingUser.Local
+                                   LastName  = pendingUser.LastName,
+                                   Local     = pendingUser.Local
                                }
                                select pendingUser).ToList();
 
@@ -124,18 +124,18 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> GetUserByIdAsync(ushort id)
+    public async Task<ActionResult<User>> GetUserByIdAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
 
         return user != null ? Ok(new UserDto
         {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
+            Id        = user.Id,
+            Username  = user.Username,
+            Email     = user.Email,
             FirstName = user.FirstName,
-            LastName = user.LastName,
-            Local = user.LocalId
+            LastName  = user.LastName,
+            Local     = user.LocalId
         }) : NotFound("User not found");
     }
 
@@ -147,12 +147,12 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         {
             var userDto = new UserDto
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
+                Id        = user.Id,
+                Username  = user.Username,
+                Email     = user.Email,
                 FirstName = user.FirstName,
-                LastName = user.LastName,
-                Local = user.LocalId
+                LastName  = user.LastName,
+                Local     = user.LocalId
             };
             userDtos.Add(userDto);
         }
@@ -164,7 +164,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> DeleteUserAsync(ushort id)
+    public async Task<ActionResult<User>> DeleteUserAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
 

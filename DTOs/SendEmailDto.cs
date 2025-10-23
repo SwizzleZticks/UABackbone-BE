@@ -9,21 +9,17 @@ public class SendEmailDto
 {
     [Required]
     [JsonPropertyName("from")]
-    public EmailContactDto From { get; set; }
-
+    public EmailContactDto        From    { get; set; }
     [Required]
     [JsonPropertyName("to")]
-    public List<EmailContactDto> To { get; set; } = [];
-    
+    public List<EmailContactDto>  To      { get; set; } = [];
     [Required]
     [JsonPropertyName("subject")]
-    public string Subject { get; set; }
-    
+    public string                 Subject { get; set; }
     [Required]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
-    
+    public string                 Text    { get; set; }
     [Required]
     [JsonPropertyName("html")]
-    public string Html { get; set; }
+    public string                 Html    { get; set; }
 }

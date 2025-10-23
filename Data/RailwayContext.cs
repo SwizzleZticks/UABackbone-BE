@@ -6,15 +6,12 @@ namespace UABackbone_Backend.Models;
 
 public partial class RailwayContext : DbContext
 {
-    public RailwayContext(DbContextOptions<RailwayContext> options)
-        : base(options)
-    {
-    }
+    public RailwayContext(DbContextOptions<RailwayContext> options) : base(options)  { }
 
-    public virtual DbSet<LocalUnion> LocalUnions { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<PendingUser> PendingUsers { get; set; }
+    public virtual DbSet<BlacklistedUser> BlacklistedUsers { get; set; }
+    public virtual DbSet<PendingUser>     PendingUsers     { get; set; }
+    public virtual DbSet<LocalUnion>      LocalUnions      { get; set; }
+    public virtual DbSet<User>            Users            { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\migrations\\20251023181030_updateidsandaddblacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:migrations\\20251023181030_updateidsandaddblacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\migrations\\railwaycontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:migrations\\railwaycontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,28 +42,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "RelativeDocumentMoniker": "Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "RelativeToolTip": "Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAIwHkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T15:58:08.009Z",
+              "WhenOpened": "2025-10-23T18:16:28.096Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\UserController.cs",
-              "RelativeToolTip": "Controllers\\UserController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAABFAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "RailwayContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\RailwayContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Migrations\\RailwayContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\RailwayContextModelSnapshot.cs",
+              "RelativeToolTip": "Migrations\\RailwayContextModelSnapshot.cs",
+              "ViewState": "AgIAANUAAAAAAAAAAAAIwOwAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T15:57:25.08Z",
+              "WhenOpened": "2025-10-23T18:13:10.787Z",
               "EditorCaption": ""
             }
           ]

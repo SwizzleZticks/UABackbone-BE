@@ -61,7 +61,7 @@ public class LocalsController(RailwayContext context) : BaseApiController
     [HttpGet("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> GetLocalByIdAsync(short local)
+    public async Task<ActionResult<LocalUnion>> GetLocalByIdAsync(int local)
     {
         var localUnion = await context.LocalUnions.FindAsync(local);
         return localUnion != null ? Ok(localUnion) : NotFound();
@@ -81,7 +81,7 @@ public class LocalsController(RailwayContext context) : BaseApiController
     [HttpPatch("{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(short local, [FromBody] LocalUnionDto aLocal)
+    public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(int local, [FromBody] LocalUnionDto aLocal)
     {
         var queriedLocal = await context.LocalUnions.FindAsync(local);
         if (queriedLocal == null)
@@ -110,7 +110,7 @@ public class LocalsController(RailwayContext context) : BaseApiController
     [HttpDelete("{local}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteLocalAsync(short local)
+    public async Task<ActionResult> DeleteLocalAsync(int local)
     {
         var localUnion = await context.LocalUnions.FindAsync(local);
 

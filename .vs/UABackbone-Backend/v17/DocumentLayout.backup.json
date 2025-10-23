@@ -3,24 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\migrations\\20251023181030_updateidsandaddblacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:migrations\\20251023181030_updateidsandaddblacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\dtos\\sendemaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:dtos\\sendemaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\extensions\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:extensions\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\migrations\\railwaycontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:migrations\\railwaycontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -55,63 +43,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\UserController.cs",
-              "RelativeToolTip": "Controllers\\UserController.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAQwFcAAAAzAAAAAAAAAA==",
+              "Title": "20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "RelativeDocumentMoniker": "Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "RelativeToolTip": "Migrations\\20251023181030_UpdateIdsAndAddBlacklistedUser.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAIwHcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T15:47:49.161Z",
+              "WhenOpened": "2025-10-23T18:16:28.096Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SendEmailDto.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\SendEmailDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\SendEmailDto.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\SendEmailDto.cs",
-              "RelativeToolTip": "DTOs\\SendEmailDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T14:25:02.562Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ServiceCollectionExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Extensions\\ServiceCollectionExtensions.cs",
-              "RelativeDocumentMoniker": "Extensions\\ServiceCollectionExtensions.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Extensions\\ServiceCollectionExtensions.cs",
-              "RelativeToolTip": "Extensions\\ServiceCollectionExtensions.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T14:23:41.269Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Services\\EmailService.cs",
-              "RelativeDocumentMoniker": "Services\\EmailService.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Services\\EmailService.cs",
-              "RelativeToolTip": "Services\\EmailService.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAowDcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-17T13:58:15.45Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AgIAANYAAAAAAAAAAAAcwO0AAAABAAAAAAAAAA==",
+              "Title": "RailwayContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\RailwayContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Migrations\\RailwayContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\RailwayContextModelSnapshot.cs",
+              "RelativeToolTip": "Migrations\\RailwayContextModelSnapshot.cs",
+              "ViewState": "AgIAANUAAAAAAAAAAAAIwOwAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T12:57:50.426Z",
+              "WhenOpened": "2025-10-23T18:13:10.787Z",
               "EditorCaption": ""
             }
           ]

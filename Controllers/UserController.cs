@@ -45,7 +45,7 @@ public class UserController(RailwayContext context, IIdentityService identitySer
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, ushort id)
+    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
     {
         aUser.Id = id;
         context.Update(aUser);
@@ -53,12 +53,12 @@ public class UserController(RailwayContext context, IIdentityService identitySer
 
         return Ok(new UserDto
         {
-            Id = aUser.Id,
-            Username = aUser.Username,
-            Email = aUser.Email,
+            Id        = aUser.Id,
+            Username  = aUser.Username,
+            Email     = aUser.Email,
             FirstName = aUser.FirstName,
-            LastName = aUser.LastName,
-            Local = aUser.LocalId
+            LastName  = aUser.LastName,
+            Local     = aUser.LocalId
         });
     }
 
