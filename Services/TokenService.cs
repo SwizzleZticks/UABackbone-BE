@@ -7,7 +7,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Services;
 
-public class TokenService(IConfiguration config) : ITokenService
+public class TokenService : ITokenService
 {
     public string CreateToken(User aUser, int hoursUntilExpiration = 24, string purpose = "auth")
     {
