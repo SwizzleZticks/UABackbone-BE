@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\migrations\\20251024142142_expandpasswordhashlength.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:migrations\\20251024142142_expandpasswordhashlength.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -43,27 +47,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AdminController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AdminController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AdminController.cs",
-              "RelativeToolTip": "Controllers\\AdminController.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
+              "Title": "20251024142142_ExpandPasswordHashLength.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251024142142_ExpandPasswordHashLength.cs",
+              "RelativeDocumentMoniker": "Migrations\\20251024142142_ExpandPasswordHashLength.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Migrations\\20251024142142_ExpandPasswordHashLength.cs",
+              "RelativeToolTip": "Migrations\\20251024142142_ExpandPasswordHashLength.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAB8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T20:38:46.12Z",
+              "WhenOpened": "2025-10-24T14:21:44.832Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Controllers\\AuthController.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAowHAAAAAeAAAAAAAAAA==",
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-23T20:31:47.826Z",
+              "WhenOpened": "2025-10-24T14:10:20.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAQwK4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T20:38:46.12Z",
               "EditorCaption": ""
             }
           ]
