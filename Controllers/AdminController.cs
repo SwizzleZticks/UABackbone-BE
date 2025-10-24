@@ -15,6 +15,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
+        Console.WriteLine($"Hit VerifyUserAsync with id={id}");
         if (pendingUser == null) return NotFound();
 
         var user = new User
