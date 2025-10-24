@@ -88,6 +88,7 @@ namespace UABackbone_Backend.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<UserDto>> LoginAsync([FromBody] LoginDto loginDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
@@ -95,6 +96,11 @@ namespace UABackbone_Backend.Controllers
             if (user == null)
             {
                 return Unauthorized("Email does not exist");
+            }
+
+            if (user.IsBlacklisted)
+            {
+                return Unauthorized("This account has been blacklisted.");
             }
 
             var password = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
