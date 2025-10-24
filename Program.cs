@@ -35,8 +35,8 @@ namespace UABackbone_Backend
 
             app.UseCors();
             app.UseHttpsRedirection();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseAuthorization();
             app.MapControllers();
             
