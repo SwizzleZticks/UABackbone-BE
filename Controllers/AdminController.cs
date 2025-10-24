@@ -144,7 +144,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return File(user.UaCardImage, "image/jpeg");
     }
     
-    [HttpGet]
+    [HttpGet("paginated-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
     {
@@ -177,7 +177,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(pendingUserDtos);
     }
 
-    [HttpGet("all")]
+    [HttpGet("all-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserDto>> GetAllUsersAsync()
     {
