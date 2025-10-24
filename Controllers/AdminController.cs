@@ -15,7 +15,6 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
-        Console.WriteLine($"Hit VerifyUserAsync with id={id}");
         if (pendingUser == null) return NotFound();
 
         var user = new User
@@ -145,7 +144,6 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return File(user.UaCardImage, "image/jpeg");
     }
     
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
