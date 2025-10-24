@@ -7,7 +7,7 @@ using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
-
+[Authorize(Roles = "Admin")]
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
     [HttpPost("{id}/approve")]
