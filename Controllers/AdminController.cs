@@ -10,7 +10,7 @@ namespace UABackbone_Backend.Controllers;
 
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
-    [HttpPost("user/{id}/approve")]
+    [HttpPost("{id}/approve")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
@@ -50,7 +50,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Created("api/Account/verify", userDto);
     }
     
-    [HttpDelete("user/{id}/reject")]
+    [HttpDelete("{id}/reject")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> DeletePendingUserAsync(int id)
@@ -67,7 +67,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPost("user/{id}/blacklist")]
+    [HttpPost("{id}/blacklist")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -131,7 +131,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         });
     }
 
-    [HttpGet("pending-users/{id}/uacard")]
+    [HttpGet("{id}/uacard")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUaCardAsync(int id)
     {
@@ -223,7 +223,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPut("toggle-admin/{id}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> PromoteUserAsync(int id)
