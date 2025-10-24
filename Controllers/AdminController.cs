@@ -207,7 +207,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }) : NotFound("User not found");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> DeleteUserAsync(int id)
@@ -224,7 +224,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("admin-toggle/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> PromoteUserAsync(int id)
