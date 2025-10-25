@@ -7,14 +7,6 @@
       "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\dtos\\blacklisteduserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:dtos\\blacklisteduserdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|c:\\users\\jddic\\riderprojects\\uabackbone-be\\models\\blacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7614BEF7-D9C6-4FBE-9D3D-F33DA5B51763}|UABackbone-Backend.csproj|solutionrelative:models\\blacklisteduser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -26,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -51,40 +43,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\UserDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\UserDto.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\UserDto.cs",
-              "RelativeToolTip": "DTOs\\UserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T22:47:45.953Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "BlacklistedUser.cs",
               "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Models\\BlacklistedUser.cs",
               "RelativeDocumentMoniker": "Models\\BlacklistedUser.cs",
               "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Models\\BlacklistedUser.cs",
               "RelativeToolTip": "Models\\BlacklistedUser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T22:34:09.907Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BlacklistedUserDto.cs",
-              "DocumentMoniker": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\BlacklistedUserDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\BlacklistedUserDto.cs",
-              "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\DTOs\\BlacklistedUserDto.cs",
-              "RelativeToolTip": "DTOs\\BlacklistedUserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T22:34:01.73Z",
+              "WhenOpened": "2025-10-25T23:40:04.984Z",
               "EditorCaption": ""
             },
             {
@@ -95,7 +61,7 @@
               "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
               "ToolTip": "C:\\Users\\jddic\\RiderProjects\\UABackbone-BE\\Controllers\\AdminController.cs",
               "RelativeToolTip": "Controllers\\AdminController.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAowHcAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAK0AAAAAAAAAAAAmwMwAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-24T15:24:38.225Z",
               "EditorCaption": ""

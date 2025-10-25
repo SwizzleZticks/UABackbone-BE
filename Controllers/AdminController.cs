@@ -180,16 +180,23 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteBlacklistedUser(int id)
     {
-        var user = await context.BlacklistedUsers
+        var blacklistEntry = await context.BlacklistedUsers
             .Include(b => b.UserAffected)
+            .Include(b => b.ByAdmin)
             .FirstOrDefaultAsync(b => b.Id == id);
+        if (blacklistEntry == null)
+        {
+            return NotFound("Blacklist entry not found");
+        }
+
+        var user = await context.Users.FindAsync(blacklistEntry.UserAffected.Id);
         if (user == null)
         {
             return NotFound("User not found");
         }
 
-        user.UserAffected.IsBlacklisted = true;
-        context.BlacklistedUsers.Remove(user);
+        user.IsBlacklisted = false;
+        context.BlacklistedUsers.Remove(blacklistEntry);
         await context.SaveChangesAsync();
 
         return NoContent();
