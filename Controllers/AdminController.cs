@@ -10,7 +10,7 @@ namespace UABackbone_Backend.Controllers;
 [Authorize(Roles = "Admin")]
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
-    [HttpPost("{id}/approve")]
+    [HttpPost("approve/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
@@ -50,7 +50,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Created("api/Account/verify", userDto);
     }
     
-    [HttpDelete("{id}/reject")]
+    [HttpDelete("reject/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> DeletePendingUserAsync(int id)
@@ -67,24 +67,14 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPost("{id}/blacklist")]
+    [HttpPost("blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> BlacklistUserAsync(int id, [FromBody] string reason)
+    public async Task<IActionResult> BlacklistUserAsync(int id, [FromBody]string reason)
     {
-        if (string.IsNullOrWhiteSpace(reason))
-        {
-            return BadRequest("A reason is required to blacklist a user.");
-        }
-        if (reason.Length > 500)
-        {
-            return BadRequest("Reason is too long (max 500 characters).");
-        }
-
         var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
         if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
         {
@@ -94,7 +84,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         var admin = await context.Users.FindAsync(adminId);
         if (admin is null)
         {
-            return Unauthorized("Admin not found.");
+            return NotFound("Admin not found.");
         }
 
         var user = await context.Users.FindAsync(id);
@@ -103,7 +93,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             return NotFound("User not found.");
         }
 
-        if (user.IsBlacklisted)
+        if (user.IsBlacklisted || await context.BlacklistedUsers.AnyAsync(b => b.UserAffected.Id == id))
         {
             return Conflict("User is already blacklisted.");
         }
@@ -113,32 +103,106 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         context.BlacklistedUsers.Add(new BlacklistedUser
         {
             UserAffected = user,
-            ByAdmin = admin,
-            Reason = reason.Trim(),
-            Date = DateTime.UtcNow
+            ByAdmin      = admin,
+            Reason       = reason.Trim(),
+            Date         = DateTime.UtcNow
         });
 
         await context.SaveChangesAsync();
 
         return Ok(new UserDto
         {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
+            Id        = user.Id,
+            Username  = user.Username,
+            Email     = user.Email,
             FirstName = user.FirstName,
-            LastName = user.LastName,
-            Local = user.LocalId
+            LastName  = user.LastName,
+            Local     = user.LocalId
         });
     }
 
-    [HttpGet("{id}/uacard")]
+    [HttpGet("blacklist/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<BlacklistedUserDto>> GetBlackListUserAsync(int id)
+    {
+        var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
+        var blacklist = await context.BlacklistedUsers
+            .Include(b => b.UserAffected)
+            .Include(b => b.ByAdmin)
+            .FirstOrDefaultAsync(b => b.Id == id);
+
+        if (blacklist == null)
+        {
+            return NotFound("Blacklist entry not found");
+        }
+
+        return Ok(new BlacklistedUserDto
+        {
+            Id = id,
+            UserAffected = new UserDto
+            {
+                Id        = blacklist.UserAffected.Id,
+                Username  = blacklist.UserAffected.Username,
+                FirstName = blacklist.UserAffected.FirstName,
+                LastName  = blacklist.UserAffected.LastName,
+                Email     = blacklist.UserAffected.Email,
+                Local     = blacklist.UserAffected.LocalId
+            },
+            ByAdmin = new UserDto
+            {
+                Id        = admin.Id,
+                Username  = admin.Username,
+                FirstName = admin.FirstName,
+                LastName  = admin.LastName,
+                Email     = admin.Email,
+                Local     = admin.LocalId
+            },
+            Reason = blacklist.Reason,
+            Date   = blacklist.Date,
+        });
+    }
+
+    [HttpDelete("blacklist/{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteBlacklistedUser(int id)
+    {
+        var user = await context.BlacklistedUsers
+            .Include(b => b.UserAffected)
+            .FirstOrDefaultAsync(b => b.Id == id);
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        user.UserAffected.IsBlacklisted = true;
+        context.BlacklistedUsers.Remove(user);
+        await context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpGet("uacard/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUaCardAsync(int id)
     {
         var user =  await context.PendingUsers.FindAsync(id);
         if (user is null)
         {
-            return NotFound();
+            return NotFound("User not found");
         }
         
         return File(user.UaCardImage, "image/jpeg");
@@ -187,7 +251,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(userDtos);
     }
 
-    [HttpGet("{id}/user")]
+    [HttpGet("user/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> GetUserByIdAsync(int id)
@@ -205,10 +269,10 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }) : NotFound("User not found");
     }
 
-    [HttpDelete("{id}/delete")]
+    [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> DeleteUserAsync(int id)
+    public async Task<IActionResult> DeleteUserAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
 
@@ -222,10 +286,10 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPut("{id}/admin-toggle")]
+    [HttpPut("admin-toggle/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> PromoteUserAsync(int id)
+    public async Task<IActionResult> PromoteUserAsync(int id)
     {
         var user = await context.Users.FindAsync(id);
 

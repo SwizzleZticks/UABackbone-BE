@@ -124,7 +124,7 @@ namespace UABackbone_Backend.Controllers
 
         [HttpPost("forgot-password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto dto)
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto dto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == dto.Email.ToLower());
 
