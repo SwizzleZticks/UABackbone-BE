@@ -2,7 +2,7 @@ namespace UABackbone_Backend.Models;
 
 public class PendingUser
 {
-    public int      Id                    { get; set; }
+    public int               Id           { get; set; }
     public required string   Username     { get; set; }
     public required string   PasswordHash { get; set; }
     public required string   FirstName    { get; set; }

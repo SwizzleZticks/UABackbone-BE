@@ -234,18 +234,44 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     {
         var pendingUsers = await context.PendingUsers.ToListAsync();
         var pendingUserDtos = (from pendingUser in pendingUsers
-                               let pendingUserDto = new UserDto
+                               let pendingUserDto = new PendingUserDto
                                {
-                                   Id        = pendingUser.Id,
-                                   Username  = pendingUser.Username,
-                                   Email     = pendingUser.Email,
-                                   FirstName = pendingUser.FirstName,
-                                   LastName  = pendingUser.LastName,
-                                   Local     = pendingUser.Local
+                                   Id          = pendingUser.Id,
+                                   Username    = pendingUser.Username,
+                                   FirstName   = pendingUser.FirstName,
+                                   LastName    = pendingUser.LastName,
+                                   Email       = pendingUser.Email,
+                                   Local       = pendingUser.Local,
+                                   SubmittedAt = pendingUser.SubmittedAt
                                }
                                select pendingUser).ToList();
 
         return Ok(pendingUserDtos);
+    }
+
+    [HttpGet("all-pending-paginated")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<PendingUserDto>>> GetPendingUsersPaginated(int page = 1, int limitSize = 25)
+    {
+        var pendingUsers = await context.PendingUsers
+            .Skip((page - 1) * limitSize)
+            .Take(limitSize)
+            .ToListAsync();
+
+        var pendingUsersDtos = (from pendingUser in pendingUsers
+                               let pendingUserDto = new PendingUserDto
+                               {
+                                   Id = pendingUser.Id,
+                                   Username = pendingUser.Username,
+                                   FirstName = pendingUser.FirstName,
+                                   LastName = pendingUser.LastName,
+                                   Email = pendingUser.Email,
+                                   Local = pendingUser.Local,
+                                   SubmittedAt = pendingUser.SubmittedAt
+                               }
+                               select pendingUser).ToList();
+
+        return Ok(pendingUsersDtos);
     }
 
     [HttpGet("all-users")]
