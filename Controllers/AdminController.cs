@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using UABackbone_Backend.DTOs;
 using UABackbone_Backend.Interfaces;
@@ -217,61 +218,79 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     
     [HttpGet("paginated-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
+    public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
     {
         var users = await context.Users
             .Skip((page - 1) * limitSize)
             .Take(limitSize)
+            .AsQueryable()
             .ToListAsync();
+        var totalCount = await context.Users.CountAsync();
         var userDtos = ConvertToUserDtos(users);
 
-        return Ok(userDtos);
+        return Ok(new PagedResultDto<UserDto>
+        {
+            Total = totalCount,
+            Items = userDtos
+        });
     }
 
     [HttpGet("all-pending")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<PendingUser>> GetAllPendingUsersAsync()
+    public async Task<ActionResult<PendingUserDto>> GetAllPendingUsersAsync()
     {
         var pendingUsers = await context.PendingUsers.ToListAsync();
-        var pendingUserDtos = (from pendingUser in pendingUsers
-                               let pendingUserDto = new PendingUserDto
-                               {
-                                   Id          = pendingUser.Id,
-                                   Username    = pendingUser.Username,
-                                   FirstName   = pendingUser.FirstName,
-                                   LastName    = pendingUser.LastName,
-                                   Email       = pendingUser.Email,
-                                   Local       = pendingUser.Local,
-                                   SubmittedAt = pendingUser.SubmittedAt
-                               }
-                               select pendingUser).ToList();
+        List<PendingUserDto> pendingUsersDtos = new List<PendingUserDto>();
+        foreach (var pendingUser in pendingUsers)
+        {
+            var pendingUserDto = new PendingUserDto
+            {
+                Id          = pendingUser.Id,
+                Username    = pendingUser.Username,
+                FirstName   = pendingUser.FirstName,
+                LastName    = pendingUser.LastName,
+                Email       = pendingUser.Email,
+                Local       = pendingUser.Local,
+                SubmittedAt = pendingUser.SubmittedAt
+            };
+            pendingUsersDtos.Add(pendingUserDto);
+        }
 
-        return Ok(pendingUserDtos);
+        return Ok(pendingUsersDtos);
     }
 
     [HttpGet("all-pending-paginated")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<PendingUserDto>>> GetPendingUsersPaginated(int page = 1, int limitSize = 25)
+    public async Task<ActionResult<PagedResultDto<PendingUserDto>>> GetPendingUsersPaginated(int page = 1, int limitSize = 25)
     {
         var pendingUsers = await context.PendingUsers
             .Skip((page - 1) * limitSize)
             .Take(limitSize)
+            .AsQueryable()
             .ToListAsync();
+        var totalCount = await context.PendingUsers.CountAsync();
 
-        var pendingUsersDtos = (from pendingUser in pendingUsers
-                               let pendingUserDto = new PendingUserDto
-                               {
-                                   Id = pendingUser.Id,
-                                   Username = pendingUser.Username,
-                                   FirstName = pendingUser.FirstName,
-                                   LastName = pendingUser.LastName,
-                                   Email = pendingUser.Email,
-                                   Local = pendingUser.Local,
-                                   SubmittedAt = pendingUser.SubmittedAt
-                               }
-                               select pendingUser).ToList();
+        List<PendingUserDto> pendingUsersDtos = new List<PendingUserDto>();
+        foreach (var pendingUser in pendingUsers)
+        {
+            var pendingUserDto = new PendingUserDto
+            {
+                Id          = pendingUser.Id,
+                Username    = pendingUser.Username,
+                FirstName   = pendingUser.FirstName,
+                LastName    = pendingUser.LastName,
+                Email       = pendingUser.Email,
+                Local       = pendingUser.Local,
+                SubmittedAt = pendingUser.SubmittedAt
+            };
+            pendingUsersDtos.Add(pendingUserDto);
+        }
 
-        return Ok(pendingUsersDtos);
+        return Ok(new PagedResultDto<PendingUserDto>
+        {
+            Total = totalCount,
+            Items = pendingUsersDtos
+        });
     }
 
     [HttpGet("all-users")]
