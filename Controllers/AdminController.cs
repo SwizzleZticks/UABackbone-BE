@@ -13,6 +13,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 {
     [HttpPost("approve/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
         var pendingUser = await context.PendingUsers.FindAsync(id);
@@ -53,6 +55,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     
     [HttpDelete("reject/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> DeletePendingUserAsync(int id)
     {
@@ -124,8 +128,9 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BlacklistedUserDto>> GetBlackListUserAsync(int id)
     {
         var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
@@ -177,8 +182,10 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     }
 
     [HttpDelete("blacklist/{id}")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBlacklistedUser(int id)
     {
         var blacklistEntry = await context.BlacklistedUsers
@@ -205,6 +212,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("uacard/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetUaCardAsync(int id)
     {
         var user =  await context.PendingUsers.FindAsync(id);
@@ -218,6 +227,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     
     [HttpGet("paginated-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
     {
         var users = await context.Users
@@ -237,6 +248,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("all-pending")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<PendingUserDto>> GetAllPendingUsersAsync()
     {
         var pendingUsers = await context.PendingUsers.ToListAsync();
@@ -261,6 +274,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("all-pending-paginated")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<PagedResultDto<PendingUserDto>>> GetPendingUsersPaginated(int page = 1, int limitSize = 25)
     {
         var pendingUsers = await context.PendingUsers
@@ -295,6 +310,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("all-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<UserDto>> GetAllUsersAsync()
     {
         var users = await context.Users.ToListAsync();
@@ -305,6 +322,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpGet("user/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> GetUserByIdAsync(int id)
     {
@@ -323,6 +342,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteUserAsync(int id)
     {
@@ -340,6 +361,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpPut("admin-toggle/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> PromoteUserAsync(int id)
     {

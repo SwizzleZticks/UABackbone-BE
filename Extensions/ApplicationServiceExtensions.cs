@@ -31,7 +31,7 @@ public static class ApplicationServiceExtensions
                 Version = "v1"
             });
 
-            // 🔐 JWT Bearer configuration
+            //JWT Bearer configuration
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
