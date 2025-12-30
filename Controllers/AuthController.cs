@@ -78,6 +78,8 @@ namespace UABackbone_Backend.Controllers
             {
                 Id          = pendingUser.Id,
                 Username    = pendingUser.Username,
+                FirstName   = pendingUser.FirstName,
+                LastName    = pendingUser.LastName,
                 Email       = pendingUser.Email,
                 Local       = pendingUser.Local,
                 SubmittedAt = DateTime.UtcNow
@@ -89,7 +91,7 @@ namespace UABackbone_Backend.Controllers
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<UserDto>> LoginAsync([FromBody] LoginDto loginDto)
+        public async Task<ActionResult<AuthResponseDto>> LoginAsync([FromBody] LoginDto loginDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
 
@@ -110,7 +112,7 @@ namespace UABackbone_Backend.Controllers
                 return Unauthorized("Invalid password");
             }
 
-            return new UserDto
+            return new AuthResponseDto
             {
                 Id        = user.Id,
                 Username  = user.Username,

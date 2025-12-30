@@ -16,5 +16,4 @@ public class UserDto
     public required string Email     { get; set; } = null!;
     [Required]
     public required int    Local     { get; set; }
-    public string          Token     { get; set; } = null!;
 }

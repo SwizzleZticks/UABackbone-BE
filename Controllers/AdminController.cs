@@ -37,7 +37,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         await emailService.SendApprovedAsync(user.Email, user.FirstName ?? "");
 
-        var userDto = new UserDto
+        var userDto = new AuthResponseDto
         {
             Id        = user.Id,
             Username  = user.Username,
