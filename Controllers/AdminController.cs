@@ -53,7 +53,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Created("api/Account/verify", userDto);
     }
     
-    [HttpDelete("reject/{id}")]
+    [HttpPost("reject/{id}/deny")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
