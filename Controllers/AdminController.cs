@@ -58,7 +58,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> DeletePendingUserAsync(int id)
+    public async Task<ActionResult<User>> DeletePendingUserAsync(int id, [FromBody]string reason)
     {
         var user = await context.PendingUsers.FindAsync(id);
 
@@ -68,6 +68,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }
         context.PendingUsers.Remove(user);
         await context.SaveChangesAsync();
+
+        await emailService.SendDeniedAsync(user.Email, user.FirstName, reason);
         
         return NoContent();
     }

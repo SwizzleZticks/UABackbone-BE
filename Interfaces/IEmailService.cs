@@ -11,4 +11,5 @@ public interface IEmailService
     Task<HttpResponseMessage> SendResetLinkAsync(string email, string firstName, string resetLink);
     Task<HttpResponseMessage> SendPendingAsync(string email, string firstName);
     Task<HttpResponseMessage> SendApprovedAsync(string email, string firstName);
+    Task<HttpResponseMessage> SendDeniedAsync(string email,  string firstName, string reason);
 }

@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using UABackbone_Backend.DTOs;
 using UABackbone_Backend.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UABackbone_Backend.Services;
 public class EmailService(HttpClient client) : IEmailService
@@ -99,6 +100,25 @@ public class EmailService(HttpClient client) : IEmailService
         Your account has been approved. You can now log in!";
         var html = $@"<p>Hi {firstName},</p>
         <p>Your account has been approved. You can now log in!</p>";
+
+        return SendAsync(email, firstName, subject, text: text, html: html);
+    }
+
+    public Task<HttpResponseMessage> SendDeniedAsync(string email, string firstName, string reason)
+    {
+        const string subject = "Account Creation Denied";
+        var text = $@"Hi {firstName},
+
+        Your account creation request has been denied. 
+        
+        Reason:
+        {reason}";
+
+        var html = 
+        $@"<p>Hi {firstName},</p>
+        <p>Your account creation request has been denied</p>
+        <p><strong>Reason:</strong></p>
+        <p>{reason}</p>";
 
         return SendAsync(email, firstName, subject, text: text, html: html);
     }
