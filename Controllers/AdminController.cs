@@ -231,15 +231,33 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(int page = 1, int limitSize = 25)
+    public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(
+        int page = 1, 
+        int limitSize = 25,
+        string? searchTerm = null)
     {
-        var users = await context.Users
+        var users = context.Users.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            var normalized = searchTerm.Trim().ToLower().ToString();
+            users = users.Where(u =>
+            u.Id.ToString()      .Contains(normalized) ||
+            u.FirstName.ToLower().Contains(normalized) ||
+            u.LastName.ToLower() .Contains(normalized) ||
+            u.Email.ToLower()    .Contains(normalized) ||
+            u.Username.ToLower() .Contains(normalized) ||
+            u.LocalId.ToString() .Contains(normalized));           
+        }
+
+        var totalCount = await context.Users.CountAsync();
+        
+        var allUsers = await users
             .Skip((page - 1) * limitSize)
             .Take(limitSize)
-            .AsQueryable()
             .ToListAsync();
-        var totalCount = await context.Users.CountAsync();
-        var userDtos = ConvertToUserDtos(users);
+
+        var userDtos = ConvertToUserDtos(allUsers);
 
         return Ok(new PagedResultDto<UserDto>
         {
