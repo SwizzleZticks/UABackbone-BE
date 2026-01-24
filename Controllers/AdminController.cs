@@ -119,12 +119,14 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         return Ok(new UserDto
         {
-            Id        = user.Id,
-            Username  = user.Username,
-            Email     = user.Email,
-            FirstName = user.FirstName,
-            LastName  = user.LastName,
-            Local     = user.LocalId
+            Id            = user.Id,
+            Username      = user.Username,
+            Email         = user.Email,
+            FirstName     = user.FirstName,
+            LastName      = user.LastName,
+            Local         = user.LocalId,
+            IsAdmin       = user.IsAdmin,
+            IsBlacklisted = user.IsBlacklisted,
         });
     }
 
@@ -162,21 +164,25 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             Id = id,
             UserAffected = new UserDto
             {
-                Id        = blacklist.UserAffected.Id,
-                Username  = blacklist.UserAffected.Username,
-                FirstName = blacklist.UserAffected.FirstName,
-                LastName  = blacklist.UserAffected.LastName,
-                Email     = blacklist.UserAffected.Email,
-                Local     = blacklist.UserAffected.LocalId
+                Id            = blacklist.UserAffected.Id,
+                Username      = blacklist.UserAffected.Username,
+                FirstName     = blacklist.UserAffected.FirstName,
+                LastName      = blacklist.UserAffected.LastName,
+                Email         = blacklist.UserAffected.Email,
+                Local         = blacklist.UserAffected.LocalId,
+                IsAdmin       = blacklist.UserAffected.IsAdmin,
+                IsBlacklisted = blacklist.UserAffected.IsBlacklisted,
             },
             ByAdmin = new UserDto
             {
-                Id        = admin.Id,
-                Username  = admin.Username,
-                FirstName = admin.FirstName,
-                LastName  = admin.LastName,
-                Email     = admin.Email,
-                Local     = admin.LocalId
+                Id            = admin.Id,
+                Username      = admin.Username,
+                FirstName     = admin.FirstName,
+                LastName      = admin.LastName,
+                Email         = admin.Email,
+                Local         = admin.LocalId,
+                IsAdmin       = admin.IsAdmin,
+                IsBlacklisted = admin.IsBlacklisted,
             },
             Reason = blacklist.Reason,
             Date   = blacklist.Date,
@@ -351,12 +357,14 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         return user != null ? Ok(new UserDto
         {
-            Id        = user.Id,
-            Username  = user.Username,
-            Email     = user.Email,
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
             FirstName = user.FirstName,
-            LastName  = user.LastName,
-            Local     = user.LocalId
+            LastName = user.LastName,
+            Local = user.LocalId,
+            IsAdmin = user.IsAdmin,
+            IsBlacklisted = user.IsBlacklisted,
         }) : NotFound("User not found");
     }
 
@@ -408,12 +416,14 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         {
             var userDto = new UserDto
             {
-                Id        = user.Id,
-                Username  = user.Username,
-                Email     = user.Email,
-                FirstName = user.FirstName,
-                LastName  = user.LastName,
-                Local     = user.LocalId
+                Id            = user.Id,
+                Username      = user.Username,
+                Email         = user.Email,
+                FirstName     = user.FirstName,
+                LastName      = user.LastName,
+                Local         = user.LocalId,
+                IsAdmin       = user.IsAdmin,
+                IsBlacklisted = user.IsBlacklisted,
             };
             userDtos.Add(userDto);
         }
