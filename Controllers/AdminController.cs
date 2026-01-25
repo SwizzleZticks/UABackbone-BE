@@ -240,13 +240,14 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(
         int page = 1, 
         int limitSize = 25,
-        string? searchTerm = null)
+        string? searchTerm = null,
+        bool? isAdmin = null)
     {
         var users = context.Users.AsQueryable();
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            var normalized = searchTerm.Trim().ToLower().ToString();
+            var normalized = searchTerm.Trim().ToLower();
             users = users.Where(u =>
             u.Id.ToString()      .Contains(normalized) ||
             u.FirstName.ToLower().Contains(normalized) ||
@@ -256,7 +257,12 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             u.LocalId.ToString() .Contains(normalized));           
         }
 
-        var totalCount = await context.Users.CountAsync();
+        if (isAdmin.HasValue)
+        {
+            users = users.Where(u => u.IsAdmin == isAdmin.Value);
+        }
+
+        var totalCount = await users.CountAsync();
         
         var allUsers = await users
             .Skip((page - 1) * limitSize)

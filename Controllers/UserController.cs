@@ -58,7 +58,9 @@ public class UserController(RailwayContext context, IIdentityService identitySer
             Email     = aUser.Email,
             FirstName = aUser.FirstName,
             LastName  = aUser.LastName,
-            Local     = aUser.LocalId
+            Local     = aUser.LocalId,
+            IsAdmin   = aUser.IsAdmin,
+            IsBlacklisted = aUser.IsBlacklisted,
         });
     }
 
