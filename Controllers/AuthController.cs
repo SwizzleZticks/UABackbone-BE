@@ -100,6 +100,12 @@ namespace UABackbone_Backend.Controllers
                 return Unauthorized("Email does not exist");
             }
 
+            //TODO: Remove when site goes live
+            if (!user.IsAdmin)
+            {
+                return Unauthorized("UABackbone is not open for member login yet.");
+            }
+
             if (user.IsBlacklisted)
             {
                 return Unauthorized("This account has been blacklisted.");
