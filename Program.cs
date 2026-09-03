@@ -19,7 +19,7 @@ namespace UABackbone_Backend
                 options.AddDefaultPolicy(
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:4200", "http://uabackbone-be.up.railway.app")
+                        policy.WithOrigins("http://localhost:4200", "http://uabackbone-be.up.railway.app", "https://uabackbone.com")
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });
