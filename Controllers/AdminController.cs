@@ -41,13 +41,15 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         var userDto = new AuthResponseDto
         {
-            Id        = user.Id,
-            Username  = user.Username,
-            FirstName = user.FirstName!,
-            LastName  = user.LastName!,
-            Email     = user.Email,
-            Local     = user.LocalId,
-            Token     = tokenService.CreateToken(user)
+            Id            = user.Id,
+            Username      = user.Username,
+            FirstName     = user.FirstName!,
+            LastName      = user.LastName!,
+            Email         = user.Email,
+            Local         = user.LocalId,
+            IsAdmin       = user.IsAdmin,
+            IsBlacklisted = user.IsBlacklisted,
+            Token         = tokenService.CreateToken(user)
         };
 
         return Created("api/Account/verify", userDto);
