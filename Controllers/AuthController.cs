@@ -102,7 +102,7 @@ namespace UABackbone_Backend.Controllers
 
             if (user == null)
             {
-                return Unauthorized("Email does not exist.");
+                return Unauthorized("Invalid Email or Password.");
             }
 
             //TODO: Remove when site goes live
@@ -111,16 +111,16 @@ namespace UABackbone_Backend.Controllers
                 return Unauthorized("UABackbone is not open for member login yet.");
             }
 
-            if (user.IsBlacklisted)
-            {
-                return Unauthorized("This account has been blacklisted.");
-            }
-
             var password = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
 
             if (!password)
             {
-                return Unauthorized("Invalid password.");
+                return Unauthorized("Invalid Email or Password.");
+            }
+
+            if (user.IsBlacklisted)
+            {
+                return Unauthorized("This account has been blacklisted.");
             }
 
             return new AuthResponseDto
