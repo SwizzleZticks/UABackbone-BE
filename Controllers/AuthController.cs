@@ -93,11 +93,16 @@ namespace UABackbone_Backend.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<AuthResponseDto>> LoginAsync([FromBody] LoginDto loginDto)
         {
+            if (await context.PendingUsers.AnyAsync(u => u.Email.ToLower() == loginDto.Email.ToLower()))
+            {
+                return Unauthorized("Account still pending review.");
+            }
+
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower());
 
             if (user == null)
             {
-                return Unauthorized("Email does not exist");
+                return Unauthorized("Email does not exist.");
             }
 
             //TODO: Remove when site goes live
@@ -115,7 +120,7 @@ namespace UABackbone_Backend.Controllers
 
             if (!password)
             {
-                return Unauthorized("Invalid password");
+                return Unauthorized("Invalid password.");
             }
 
             return new AuthResponseDto
