@@ -17,6 +17,10 @@ namespace UABackbone_Backend.DTOs
         public required string Email { get; set; } = null!;
         [Required]
         public required int Local { get; set; }
+        [Required]
+        public required bool IsAdmin { get; set; }
+        [Required]
+        public required bool IsBlacklisted { get; set; }
         public string Token { get; set; } = null!;
     }
 }
