@@ -8,7 +8,7 @@ namespace UABackbone_Backend.Controllers;
 public class UsersController(RailwayContext context, IIdentityService identityService) : BaseApiController
 {
 
-    [HttpGet("user/{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]

@@ -7,7 +7,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/pending-users")]
     [ApiController]
     public class PendingUsersController(RailwayContext context, IIdentityService identityService) : BaseApiController
     {
