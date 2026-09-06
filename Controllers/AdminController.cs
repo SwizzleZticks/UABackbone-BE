@@ -10,28 +10,39 @@ namespace UABackbone_Backend.Controllers;
 [Authorize(Roles = "Admin")]
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
-
     [HttpPut("user/update/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
     {
-        aUser.Id = id;
-        context.Update(aUser);
+        var user = await context.Users.FindAsync(id);
+
+        if (user is null)
+        {
+            return NotFound("User not found.");
+        }
+
+        user.Username  = aUser.Username;
+        user.Email     = aUser.Email;
+        user.FirstName = aUser.FirstName;
+        user.LastName  = aUser.LastName;
+        user.LocalId   = aUser.LocalId;
+
         await context.SaveChangesAsync();
 
         return Ok(new UserDto
         {
-            Id = aUser.Id,
-            Username = aUser.Username,
-            Email = aUser.Email,
-            FirstName = aUser.FirstName,
-            LastName = aUser.LastName,
-            Local = aUser.LocalId,
-            IsAdmin = aUser.IsAdmin,
-            IsBlacklisted = aUser.IsBlacklisted,
+            Id            = user.Id,
+            Username      = user.Username,
+            Email         = user.Email,
+            FirstName     = user.FirstName,
+            LastName      = user.LastName,
+            Local         = user.LocalId,
+            IsAdmin       = user.IsAdmin,
+            IsBlacklisted = user.IsBlacklisted
         });
     }
+
     [HttpDelete("user/delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
