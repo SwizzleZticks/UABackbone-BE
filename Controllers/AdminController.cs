@@ -65,22 +65,22 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         context.BlacklistedUsers.Add(new BlacklistedUser
         {
             UserAffected = user,
-            ByAdmin = admin,
-            Reason = reason.Trim(),
-            Date = DateTime.UtcNow
+            ByAdmin      = admin,
+            Reason       = reason.Trim(),
+            Date         = DateTime.UtcNow
         });
 
         await context.SaveChangesAsync();
 
         return Ok(new UserDto
         {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Local = user.LocalId,
-            IsAdmin = user.IsAdmin,
+            Id            = user.Id,
+            Username      = user.Username,
+            Email         = user.Email,
+            FirstName     = user.FirstName,
+            LastName      = user.LastName,
+            Local         = user.LocalId,
+            IsAdmin       = user.IsAdmin,
             IsBlacklisted = user.IsBlacklisted,
         });
     }
@@ -179,7 +179,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Created("api/Account/verify", userDto);
     }
     
-    [HttpPost("pending-user/reject/{id}/deny")]
+    [HttpPost("pending-user/reject/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
