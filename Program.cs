@@ -14,6 +14,10 @@ namespace UABackbone_Backend
             builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddEmailService();
             builder.Services.AddIdentityService();
+            builder.Services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
