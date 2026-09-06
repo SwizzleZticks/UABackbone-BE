@@ -200,7 +200,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPost("locals")]
+    [HttpPost("local")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<LocalUnion>> CreateLocalAsync([FromBody] LocalUnion newLocal)
@@ -212,7 +212,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     }
 
 
-    [HttpPatch("locals/{local}")]
+    [HttpPatch("local/{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(int local, [FromBody] LocalUnionDto aLocal)
@@ -241,7 +241,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(queriedLocal);
     }
 
-    [HttpDelete("locals/{local}")]
+    [HttpDelete("local/{local}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteLocalAsync(int local)
