@@ -234,51 +234,6 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         
         return File(user.UaCardImage, "image/jpeg");
     }
-    
-    [HttpGet("paginated-users")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(
-        int page = 1, 
-        int limitSize = 25,
-        string? searchTerm = null,
-        bool? isAdmin = null)
-    {
-        var users = context.Users.AsQueryable();
-
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            var normalized = searchTerm.Trim().ToLower();
-            users = users.Where(u =>
-            u.Id.ToString()      .Contains(normalized) ||
-            u.FirstName.ToLower().Contains(normalized) ||
-            u.LastName.ToLower() .Contains(normalized) ||
-            u.Email.ToLower()    .Contains(normalized) ||
-            u.Username.ToLower() .Contains(normalized) ||
-            u.LocalId.ToString() .Contains(normalized));           
-        }
-
-        if (isAdmin.HasValue)
-        {
-            users = users.Where(u => u.IsAdmin == isAdmin.Value);
-        }
-
-        var totalCount = await users.CountAsync();
-        
-        var allUsers = await users
-            .Skip((page - 1) * limitSize)
-            .Take(limitSize)
-            .ToListAsync();
-
-        var userDtos = ConvertToUserDtos(allUsers);
-
-        return Ok(new PagedResultDto<UserDto>
-        {
-            Total = totalCount,
-            Items = userDtos
-        });
-    }
 
     [HttpGet("all-pending")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -342,40 +297,6 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         });
     }
 
-    [HttpGet("all-users")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult<UserDto>> GetAllUsersAsync()
-    {
-        var users = await context.Users.ToListAsync();
-        var userDtos = ConvertToUserDtos(users);
-
-        return Ok(userDtos);
-    }
-
-    [HttpGet("user/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<User>> GetUserByIdAsync(int id)
-    {
-        var user = await context.Users.FindAsync(id);
-
-        return user != null ? Ok(new UserDto
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Local = user.LocalId,
-            IsAdmin = user.IsAdmin,
-            IsBlacklisted = user.IsBlacklisted,
-        }) : NotFound("User not found");
-    }
-
     [HttpDelete("delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -433,28 +354,5 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             BlacklistedUsersCount = blacklistedUsersCount,
             JobsCount             = 0, //TODO: Fix when implemented
         });
-    }
-
-    private List<UserDto> ConvertToUserDtos(List<User> users)
-    {
-        var userDtos = new List<UserDto>();
-
-        foreach (var user in users)
-        {
-            var userDto = new UserDto
-            {
-                Id            = user.Id,
-                Username      = user.Username,
-                Email         = user.Email,
-                FirstName     = user.FirstName,
-                LastName      = user.LastName,
-                Local         = user.LocalId,
-                IsAdmin       = user.IsAdmin,
-                IsBlacklisted = user.IsBlacklisted,
-            };
-            userDtos.Add(userDto);
-        }
-
-        return userDtos;
     }
 }
