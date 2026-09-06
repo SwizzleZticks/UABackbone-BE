@@ -85,7 +85,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         });
     }
 
-    [HttpDelete("remove-blacklist/{id}")]
+    [HttpDelete("user/remove-blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
