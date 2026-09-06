@@ -87,40 +87,6 @@ public class UsersController(RailwayContext context, IIdentityService identitySe
         });
     }
 
-
-    [HttpGet("check-username")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CheckUsernameAsync([FromQuery]string username)
-    {
-        if (string.IsNullOrWhiteSpace(username))
-        {
-            return BadRequest("Username field is required");
-        }
-
-        bool isTaken = await identityService.UsernameExistsAsync(username);
-
-        
-        return isTaken ? Ok() : NotFound();
-    }
-
-    [HttpGet("check-email")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CheckEmailAsync([FromQuery]string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            return BadRequest("Email field is required");
-        }
-
-        bool isTaken = await identityService.EmailExistsAsync(email);
-
-        return isTaken ? Ok() : NotFound();
-    }
-
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -142,6 +108,7 @@ public class UsersController(RailwayContext context, IIdentityService identitySe
             IsBlacklisted = aUser.IsBlacklisted,
         });
     }
+
 
     private List<UserDto> ConvertToUserDtos(List<User> users)
     {

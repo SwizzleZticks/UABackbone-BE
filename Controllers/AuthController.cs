@@ -187,5 +187,38 @@ namespace UABackbone_Backend.Controllers
 
             return Ok(new { message = "Password has been successfully reset." });
         }
+
+        [HttpGet("check-username")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CheckUsernameAsync([FromQuery] string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return BadRequest("Username field is required");
+            }
+
+            bool isTaken = await identityService.UsernameExistsAsync(username);
+
+
+            return isTaken ? Ok() : NotFound();
+        }
+
+        [HttpGet("check-email")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CheckEmailAsync([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest("Email field is required");
+            }
+
+            bool isTaken = await identityService.EmailExistsAsync(email);
+
+            return isTaken ? Ok() : NotFound();
+        }
     }
 }
