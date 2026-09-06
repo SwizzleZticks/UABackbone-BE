@@ -416,7 +416,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(new { token = newToken });
     }
 
-    [HttpGet("admin/dashboard")]
+    [HttpGet("dashboard")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
