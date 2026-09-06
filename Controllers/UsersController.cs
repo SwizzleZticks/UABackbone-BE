@@ -1,17 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UABackbone_Backend.DTOs;
-using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
-public class UsersController(RailwayContext context, IIdentityService identityService) : BaseApiController
+public class UsersController(RailwayContext context) : BaseApiController
 {
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> GetUserByIdAsync(int id)
     {
@@ -19,24 +16,22 @@ public class UsersController(RailwayContext context, IIdentityService identitySe
 
         return user != null ? Ok(new UserDto
         {
-            Id = user.Id,
-            Username = user.Username,
-            Email = user.Email,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Local = user.LocalId,
-            IsAdmin = user.IsAdmin,
+            Id            = user.Id,
+            Username      = user.Username,
+            Email         = user.Email,
+            FirstName     = user.FirstName,
+            LastName      = user.LastName,
+            Local         = user.LocalId,
+            IsAdmin       = user.IsAdmin,
             IsBlacklisted = user.IsBlacklisted,
         }) : NotFound("User not found");
     }
 
     [HttpGet("all-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<UserDto>> GetAllUsersAsync()
     {
-        var users = await context.Users.ToListAsync();
+        var users    = await context.Users.ToListAsync();
         var userDtos = ConvertToUserDtos(users);
 
         return Ok(userDtos);
@@ -44,8 +39,6 @@ public class UsersController(RailwayContext context, IIdentityService identitySe
 
     [HttpGet("paginated-users")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<PagedResultDto<UserDto>>> GetUsersPaginatedAsync(
         int page = 1,
         int limitSize = 25,

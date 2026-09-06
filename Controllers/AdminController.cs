@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using UABackbone_Backend.DTOs;
 using UABackbone_Backend.Interfaces;
@@ -11,7 +10,7 @@ namespace UABackbone_Backend.Controllers;
 [Authorize(Roles = "Admin")]
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
-    [HttpPost("approve/{id}")]
+    [HttpPost("pending-user/approve/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -55,7 +54,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Created("api/Account/verify", userDto);
     }
     
-    [HttpPost("reject/{id}/deny")]
+    [HttpPost("pending-user/reject/{id}/deny")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -76,7 +75,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPost("blacklist/{id}")]
+    [HttpPost("user/blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -132,66 +131,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         });
     }
 
-    [HttpGet("blacklist/{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<BlacklistedUserDto>> GetBlackListUserAsync(int id)
-    {
-        var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
-        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
-        {
-            return Unauthorized("Missing or invalid admin identity.");
-        }
 
-        var admin = await context.Users.FindAsync(adminId);
-        if (admin is null)
-        {
-            return NotFound("Admin not found.");
-        }
-
-        var blacklist = await context.BlacklistedUsers
-            .Include(b => b.UserAffected)
-            .Include(b => b.ByAdmin)
-            .FirstOrDefaultAsync(b => b.Id == id);
-
-        if (blacklist == null)
-        {
-            return NotFound("Blacklist entry not found");
-        }
-
-        return Ok(new BlacklistedUserDto
-        {
-            Id = id,
-            UserAffected = new UserDto
-            {
-                Id            = blacklist.UserAffected.Id,
-                Username      = blacklist.UserAffected.Username,
-                FirstName     = blacklist.UserAffected.FirstName,
-                LastName      = blacklist.UserAffected.LastName,
-                Email         = blacklist.UserAffected.Email,
-                Local         = blacklist.UserAffected.LocalId,
-                IsAdmin       = blacklist.UserAffected.IsAdmin,
-                IsBlacklisted = blacklist.UserAffected.IsBlacklisted,
-            },
-            ByAdmin = new UserDto
-            {
-                Id            = admin.Id,
-                Username      = admin.Username,
-                FirstName     = admin.FirstName,
-                LastName      = admin.LastName,
-                Email         = admin.Email,
-                Local         = admin.LocalId,
-                IsAdmin       = admin.IsAdmin,
-                IsBlacklisted = admin.IsBlacklisted,
-            },
-            Reason = blacklist.Reason,
-            Date   = blacklist.Date,
-        });
-    }
-
-    [HttpDelete("blacklist/{id}")]
+    [HttpDelete("remove-blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -220,7 +161,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpDelete("delete/{id}")]
+    [HttpDelete("user/delete/{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -239,7 +180,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return NoContent();
     }
 
-    [HttpPut("admin-toggle/{id}")]
+    [HttpPut("user/admin-toggle/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -260,7 +201,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(new { token = newToken });
     }
 
-    [HttpGet("dashboard")]
+    [HttpGet("dashboard-data")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
