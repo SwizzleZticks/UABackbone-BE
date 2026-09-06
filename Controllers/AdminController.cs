@@ -416,6 +416,25 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         return Ok(new { token = newToken });
     }
 
+    [HttpGet("admin/dashboard")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<DashboardDto>> GetDashboardCounts()
+    {
+        var usersCount            = await context.Users.CountAsync();
+        var pendingUsersCount     = await context.PendingUsers.CountAsync();
+        var blacklistedUsersCount = await context.BlacklistedUsers.CountAsync();
+
+        return Ok(new DashboardDto
+        {
+            TotalUsersCount       = usersCount,
+            PendingUsersCount     = pendingUsersCount,
+            BlacklistedUsersCount = blacklistedUsersCount,
+            JobsCount             = 0, //TODO: Fix when implemented
+        });
+    }
+
     private List<UserDto> ConvertToUserDtos(List<User> users)
     {
         var userDtos = new List<UserDto>();
