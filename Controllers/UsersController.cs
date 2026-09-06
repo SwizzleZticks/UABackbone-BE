@@ -80,29 +80,6 @@ public class UsersController(RailwayContext context) : BaseApiController
         });
     }
 
-    [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
-    {
-        aUser.Id = id;
-        context.Update(aUser);
-        await context.SaveChangesAsync();
-
-        return Ok(new UserDto
-        {
-            Id        = aUser.Id,
-            Username  = aUser.Username,
-            Email     = aUser.Email,
-            FirstName = aUser.FirstName,
-            LastName  = aUser.LastName,
-            Local     = aUser.LocalId,
-            IsAdmin   = aUser.IsAdmin,
-            IsBlacklisted = aUser.IsBlacklisted,
-        });
-    }
-
-
     private List<UserDto> ConvertToUserDtos(List<User> users)
     {
         var userDtos = new List<UserDto>();
