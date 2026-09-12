@@ -164,9 +164,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         user.IsAdmin = !user.IsAdmin;
         await context.SaveChangesAsync();
-        var newToken = tokenService.CreateToken(user);
 
-        return Ok(new { token = newToken });
+        return Ok();
     }
 
     [HttpPost("pending-user/approve/{id}")]
