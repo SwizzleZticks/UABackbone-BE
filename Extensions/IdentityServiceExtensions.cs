@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using UABackbone_Backend.Authorization;
 
 namespace UABackbone_Backend.Extensions;
 
@@ -16,11 +17,18 @@ public static class IdentityServiceExtensions
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+                    ValidateIssuer           = false,
+                    ValidateAudience         = false
                 };
             });
+
+        services.AddAuthorizationBuilder().AddPolicy("CurrentAdmin", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.Requirements.Add(new CurrentAdminRequirement());
+        });
+
         return services;
     }
 }

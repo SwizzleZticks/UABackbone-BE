@@ -7,11 +7,12 @@ using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = "CurrentAdmin")]
 public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
 {
     [HttpPut("user/update/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
     {
@@ -236,6 +237,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [HttpPost("local")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<LocalUnion>> CreateLocalAsync([FromBody] LocalUnion newLocal)
     {
         context.LocalUnions.Add(newLocal);
@@ -247,6 +249,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpPatch("local/{local}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(int local, [FromBody] LocalUnionDto aLocal)
     {
@@ -276,6 +279,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpDelete("local/{local}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteLocalAsync(int local)
     {

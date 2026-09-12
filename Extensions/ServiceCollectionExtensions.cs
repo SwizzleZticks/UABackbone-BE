@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using System.Net.Http.Headers;
+using UABackbone_Backend.Authorization;
 using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Services;
 
@@ -25,6 +27,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddIdentityService(this IServiceCollection services)
     {
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IAuthorizationHandler, CurrentAdminHandler>();
         return services;
     }
 }
