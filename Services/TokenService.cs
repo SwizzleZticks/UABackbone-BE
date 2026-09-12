@@ -21,15 +21,6 @@ public class TokenService : ITokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
         var claims = new List<Claim>();
 
-        if (aUser.IsAdmin)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-        }
-        else
-        {
-            claims.Add(new Claim(ClaimTypes.Role, "User"));
-        }
-
         claims.Add(new Claim(ClaimTypes.Sid, aUser.Id.ToString()));
         claims.Add(new Claim(ClaimTypes.NameIdentifier, aUser.Username));
         claims.Add(new Claim("token_type", purpose));
