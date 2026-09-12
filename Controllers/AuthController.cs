@@ -155,8 +155,7 @@ namespace UABackbone_Backend.Controllers
 
             await context.SaveChangesAsync();
 
-            //TODO: Change when site goes live, need to change to uabackbone.com
-            var resetLink = $"uabackone.com/auth/reset-password?token={token}";
+            var resetLink = $"https://uabackone.com/auth/reset-password?token={token}";
 
             await emailService.SendResetLinkAsync(user.Email, user.FirstName, resetLink);
 
