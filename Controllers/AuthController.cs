@@ -155,7 +155,7 @@ namespace UABackbone_Backend.Controllers
 
             await context.SaveChangesAsync();
 
-            var resetLink = $"https://uabackbone.com/auth/reset-password?token={token}";
+            var resetLink = $"https://uabackbone.com/reset-password?token={token}";
 
             await emailService.SendResetLinkAsync(user.Email, user.FirstName, resetLink);
 
