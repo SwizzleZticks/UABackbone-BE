@@ -16,6 +16,8 @@ public partial class User
     public required bool      IsVerified                { get; set; }
     public required bool      IsAdmin                   { get; set; }
     public required bool      IsBlacklisted             { get; set; }
+    public bool               IsBusinessAgent           { get; set; }
+    public bool               IsBusinessManager         { get; set; }
     public virtual LocalUnion Local                     { get; set; } = null!;
     public string?            PasswordResetToken        { get; set; }
     public DateTime?          PasswordResetTokenExpires { get; set; }

@@ -16,14 +16,16 @@ public class UsersController(RailwayContext context) : BaseApiController
 
         return user != null ? Ok(new UserDto
         {
-            Id            = user.Id,
-            Username      = user.Username,
-            Email         = user.Email,
-            FirstName     = user.FirstName,
-            LastName      = user.LastName,
-            Local         = user.LocalId,
-            IsAdmin       = user.IsAdmin,
-            IsBlacklisted = user.IsBlacklisted,
+            Id                = user.Id,
+            Username          = user.Username,
+            Email             = user.Email,
+            FirstName         = user.FirstName,
+            LastName          = user.LastName,
+            Local             = user.LocalId,
+            IsAdmin           = user.IsAdmin,
+            IsBlacklisted     = user.IsBlacklisted,
+            IsBusinessAgent   = user.IsBusinessAgent,
+            IsBusinessManager = user.IsBusinessManager
         }) : NotFound("User not found");
     }
 
@@ -88,14 +90,16 @@ public class UsersController(RailwayContext context) : BaseApiController
         {
             var userDto = new UserDto
             {
-                Id = user.Id,
-                Username = user.Username,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Local = user.LocalId,
-                IsAdmin = user.IsAdmin,
-                IsBlacklisted = user.IsBlacklisted,
+                Id                = user.Id,
+                Username          = user.Username,
+                Email             = user.Email,
+                FirstName         = user.FirstName,
+                LastName          = user.LastName,
+                Local             = user.LocalId,
+                IsAdmin           = user.IsAdmin,
+                IsBlacklisted     = user.IsBlacklisted,
+                IsBusinessAgent   = user.IsBusinessAgent,
+                IsBusinessManager = user.IsBusinessManager
             };
             userDtos.Add(userDto);
         }

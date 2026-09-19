@@ -12,6 +12,7 @@ public partial class RailwayContext : DbContext
     public virtual DbSet<PendingUser>     PendingUsers     { get; set; }
     public virtual DbSet<LocalUnion>      LocalUnions      { get; set; }
     public virtual DbSet<User>            Users            { get; set; }
+    public virtual DbSet<AdminAction>     AdminActions     { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,6 +50,8 @@ public partial class RailwayContext : DbContext
                   .HasColumnName("first_name");
             entity.Property(e => e.IsAdmin).HasColumnName("is_admin");
             entity.Property(e => e.IsBlacklisted).HasColumnName("is_blacklisted");
+            entity.Property(e => e.IsBusinessAgent).HasColumnName("is_business_agent");
+            entity.Property(e => e.IsBusinessManager).HasColumnName("is_business_manager");
             entity.Property(e => e.IsVerified).HasColumnName("is_verified");
             entity.Property(e => e.LastName)
                   .HasMaxLength(35)
@@ -65,6 +68,22 @@ public partial class RailwayContext : DbContext
                   .HasColumnName("username")
                   .IsRequired();
         });
+
+        modelBuilder.Entity<AdminAction>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(e => e.ByAdmin)
+                .WithMany()
+                .HasForeignKey(e => e.ByAdminId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.UserAffected)
+                .WithMany()
+                .HasForeignKey(e => e.UserAffectedId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

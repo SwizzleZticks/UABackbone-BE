@@ -31,26 +31,30 @@ namespace UABackbone_Backend.Controllers
 
                 UserAffected = new UserDto
                 {
-                    Id            = blacklist.UserAffected.Id,
-                    Username      = blacklist.UserAffected.Username,
-                    FirstName     = blacklist.UserAffected.FirstName,
-                    LastName      = blacklist.UserAffected.LastName,
-                    Email         = blacklist.UserAffected.Email,
-                    Local         = blacklist.UserAffected.LocalId,
-                    IsAdmin       = blacklist.UserAffected.IsAdmin,
-                    IsBlacklisted = blacklist.UserAffected.IsBlacklisted
+                    Id                = blacklist.UserAffected.Id,
+                    Username          = blacklist.UserAffected.Username,
+                    FirstName         = blacklist.UserAffected.FirstName,
+                    LastName          = blacklist.UserAffected.LastName,
+                    Email             = blacklist.UserAffected.Email,
+                    Local             = blacklist.UserAffected.LocalId,
+                    IsAdmin           = blacklist.UserAffected.IsAdmin,
+                    IsBlacklisted     = blacklist.UserAffected.IsBlacklisted,
+                    IsBusinessAgent   = blacklist.UserAffected.IsBusinessAgent,
+                    IsBusinessManager = blacklist.UserAffected.IsBusinessManager
                 },
 
                 ByAdmin = new UserDto
                 {
-                    Id            = blacklist.ByAdmin.Id,
-                    Username      = blacklist.ByAdmin.Username,
-                    FirstName     = blacklist.ByAdmin.FirstName,
-                    LastName      = blacklist.ByAdmin.LastName,
-                    Email         = blacklist.ByAdmin.Email,
-                    Local         = blacklist.ByAdmin.LocalId,
-                    IsAdmin       = blacklist.ByAdmin.IsAdmin,
-                    IsBlacklisted = blacklist.ByAdmin.IsBlacklisted
+                    Id                = blacklist.ByAdmin.Id,
+                    Username          = blacklist.ByAdmin.Username,
+                    FirstName         = blacklist.ByAdmin.FirstName,
+                    LastName          = blacklist.ByAdmin.LastName,
+                    Email             = blacklist.ByAdmin.Email,
+                    Local             = blacklist.ByAdmin.LocalId,
+                    IsAdmin           = blacklist.ByAdmin.IsAdmin,
+                    IsBlacklisted     = blacklist.ByAdmin.IsBlacklisted,
+                    IsBusinessAgent   = blacklist.ByAdmin.IsBusinessAgent,
+                    IsBusinessManager = blacklist.ByAdmin.IsBusinessManager
                 },
 
                 Reason = blacklist.Reason,
@@ -80,26 +84,30 @@ namespace UABackbone_Backend.Controllers
 
                     UserAffected = new UserDto
                     {
-                        Id            = blacklistedUser.UserAffected.Id,
-                        Username      = blacklistedUser.UserAffected.Username,
-                        FirstName     = blacklistedUser.UserAffected.FirstName,
-                        LastName      = blacklistedUser.UserAffected.LastName,
-                        Email         = blacklistedUser.UserAffected.Email,
-                        Local         = blacklistedUser.UserAffected.LocalId,
-                        IsAdmin       = blacklistedUser.UserAffected.IsAdmin,
-                        IsBlacklisted = blacklistedUser.UserAffected.IsBlacklisted
+                        Id                = blacklistedUser.UserAffected.Id,
+                        Username          = blacklistedUser.UserAffected.Username,
+                        FirstName         = blacklistedUser.UserAffected.FirstName,
+                        LastName          = blacklistedUser.UserAffected.LastName,
+                        Email             = blacklistedUser.UserAffected.Email,
+                        Local             = blacklistedUser.UserAffected.LocalId,
+                        IsAdmin           = blacklistedUser.UserAffected.IsAdmin,
+                        IsBlacklisted     = blacklistedUser.UserAffected.IsBlacklisted,
+                        IsBusinessAgent   = blacklistedUser.UserAffected.IsBusinessAgent,
+                        IsBusinessManager = blacklistedUser.UserAffected.IsBusinessManager,
                     },
 
                     ByAdmin = new UserDto
                     {
-                        Id            = blacklistedUser.ByAdmin.Id,
-                        Username      = blacklistedUser.ByAdmin.Username,
-                        FirstName     = blacklistedUser.ByAdmin.FirstName,
-                        LastName      = blacklistedUser.ByAdmin.LastName,
-                        Email         = blacklistedUser.ByAdmin.Email,
-                        Local         = blacklistedUser.ByAdmin.LocalId,
-                        IsAdmin       = blacklistedUser.ByAdmin.IsAdmin,
-                        IsBlacklisted = blacklistedUser.ByAdmin.IsBlacklisted
+                        Id                = blacklistedUser.ByAdmin.Id,
+                        Username          = blacklistedUser.ByAdmin.Username,
+                        FirstName         = blacklistedUser.ByAdmin.FirstName,
+                        LastName          = blacklistedUser.ByAdmin.LastName,
+                        Email             = blacklistedUser.ByAdmin.Email,
+                        Local             = blacklistedUser.ByAdmin.LocalId,
+                        IsAdmin           = blacklistedUser.ByAdmin.IsAdmin,
+                        IsBlacklisted     = blacklistedUser.ByAdmin.IsBlacklisted,
+                        IsBusinessAgent   = blacklistedUser.ByAdmin.IsBusinessAgent,
+                        IsBusinessManager = blacklistedUser.ByAdmin.IsBusinessManager
                     },
 
                     Reason = blacklistedUser.Reason,
@@ -135,26 +143,30 @@ namespace UABackbone_Backend.Controllers
 
                     UserAffected = new UserDto
                     {
-                        Id            = blacklistedUser.UserAffected.Id,
-                        Username      = blacklistedUser.UserAffected.Username,
-                        FirstName     = blacklistedUser.UserAffected.FirstName,
-                        LastName      = blacklistedUser.UserAffected.LastName,
-                        Email         = blacklistedUser.UserAffected.Email,
-                        Local         = blacklistedUser.UserAffected.LocalId,
-                        IsAdmin       = blacklistedUser.UserAffected.IsAdmin,
-                        IsBlacklisted = blacklistedUser.UserAffected.IsBlacklisted
+                        Id                = blacklistedUser.UserAffected.Id,
+                        Username          = blacklistedUser.UserAffected.Username,
+                        FirstName         = blacklistedUser.UserAffected.FirstName,
+                        LastName          = blacklistedUser.UserAffected.LastName,
+                        Email             = blacklistedUser.UserAffected.Email,
+                        Local             = blacklistedUser.UserAffected.LocalId,
+                        IsAdmin           = blacklistedUser.UserAffected.IsAdmin,
+                        IsBlacklisted     = blacklistedUser.UserAffected.IsBlacklisted,
+                        IsBusinessAgent   = blacklistedUser.UserAffected.IsBusinessAgent,
+                        IsBusinessManager = blacklistedUser.UserAffected.IsBusinessManager,
                     },
 
                     ByAdmin = new UserDto
                     {
-                        Id            = blacklistedUser.ByAdmin.Id,
-                        Username      = blacklistedUser.ByAdmin.Username,
-                        FirstName     = blacklistedUser.ByAdmin.FirstName,
-                        LastName      = blacklistedUser.ByAdmin.LastName,
-                        Email         = blacklistedUser.ByAdmin.Email,
-                        Local         = blacklistedUser.ByAdmin.LocalId,
-                        IsAdmin       = blacklistedUser.ByAdmin.IsAdmin,
-                        IsBlacklisted = blacklistedUser.ByAdmin.IsBlacklisted
+                        Id                = blacklistedUser.ByAdmin.Id,
+                        Username          = blacklistedUser.ByAdmin.Username,
+                        FirstName         = blacklistedUser.ByAdmin.FirstName,
+                        LastName          = blacklistedUser.ByAdmin.LastName,
+                        Email             = blacklistedUser.ByAdmin.Email,
+                        Local             = blacklistedUser.ByAdmin.LocalId,
+                        IsAdmin           = blacklistedUser.ByAdmin.IsAdmin,
+                        IsBlacklisted     = blacklistedUser.ByAdmin.IsBlacklisted,
+                        IsBusinessAgent   = blacklistedUser.ByAdmin.IsBusinessAgent,
+                        IsBusinessManager = blacklistedUser.ByAdmin.IsBusinessManager,
                     },
 
                     Reason = blacklistedUser.Reason,

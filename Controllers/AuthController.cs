@@ -253,14 +253,16 @@ namespace UABackbone_Backend.Controllers
 
             return Ok(new UserDto
             {
-                Id            = user.Id,
-                Username      = user.Username,
-                FirstName     = user.FirstName,
-                LastName      = user.LastName,
-                Email         = user.Email,
-                Local         = user.LocalId,
-                IsAdmin       = user.IsAdmin,
-                IsBlacklisted = user.IsBlacklisted
+                Id                = user.Id,
+                Username          = user.Username,
+                Email             = user.Email,
+                FirstName         = user.FirstName,
+                LastName          = user.LastName,
+                Local             = user.LocalId,
+                IsAdmin           = user.IsAdmin,
+                IsBlacklisted     = user.IsBlacklisted,
+                IsBusinessAgent   = user.IsBusinessAgent,
+                IsBusinessManager = user.IsBusinessManager,
             });
         }
 

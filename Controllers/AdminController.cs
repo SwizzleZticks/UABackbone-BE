@@ -33,14 +33,16 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         return Ok(new UserDto
         {
-            Id            = user.Id,
-            Username      = user.Username,
-            Email         = user.Email,
-            FirstName     = user.FirstName,
-            LastName      = user.LastName,
-            Local         = user.LocalId,
-            IsAdmin       = user.IsAdmin,
-            IsBlacklisted = user.IsBlacklisted
+            Id                = user.Id,
+            Username          = user.Username,
+            Email             = user.Email,
+            FirstName         = user.FirstName,
+            LastName          = user.LastName,
+            Local             = user.LocalId,
+            IsAdmin           = user.IsAdmin,
+            IsBlacklisted     = user.IsBlacklisted,
+            IsBusinessAgent   = user.IsBusinessAgent,
+            IsBusinessManager = user.IsBusinessManager,
         });
     }
 
@@ -108,14 +110,16 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         return Ok(new UserDto
         {
-            Id            = user.Id,
-            Username      = user.Username,
-            Email         = user.Email,
-            FirstName     = user.FirstName,
-            LastName      = user.LastName,
-            Local         = user.LocalId,
-            IsAdmin       = user.IsAdmin,
-            IsBlacklisted = user.IsBlacklisted,
+            Id                = user.Id,
+            Username          = user.Username,
+            Email             = user.Email,
+            FirstName         = user.FirstName,
+            LastName          = user.LastName,
+            Local             = user.LocalId,
+            IsAdmin           = user.IsAdmin,
+            IsBlacklisted     = user.IsBlacklisted,
+            IsBusinessAgent   = user.IsBusinessAgent,
+            IsBusinessManager = user.IsBusinessManager,
         });
     }
 
@@ -155,6 +159,20 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ToggleAdminAsync(int id)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var user = await context.Users.FindAsync(id);
 
         if (user == null)
@@ -163,6 +181,17 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }
 
         user.IsAdmin = !user.IsAdmin;
+
+        context.AdminActions.Add(new AdminAction
+        {
+            ByAdminId      = admin.Id,
+            ByAdmin        = admin,
+            UserAffectedId = user.Id,
+            UserAffected   = user,
+            Action         = user.IsAdmin ? "Promoted" : "Demoted",
+            Date           = DateTime.UtcNow
+        });
+
         await context.SaveChangesAsync();
 
         return Ok();
