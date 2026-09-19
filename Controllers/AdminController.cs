@@ -151,16 +151,31 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBlacklistedUser(int id)
     {
+        var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var blacklistEntry = await context.BlacklistedUsers
             .Include(b => b.UserAffected)
-            .Include(b => b.ByAdmin)
-            .FirstOrDefaultAsync(b => b.Id == id);
+            .FirstOrDefaultAsync(b => b.UserAffected.Id == id);
+
         if (blacklistEntry == null)
         {
             return NotFound("Blacklist entry not found");
         }
 
-        var user = await context.Users.FindAsync(blacklistEntry.UserAffected.Id);
+        var user = blacklistEntry.UserAffected;
+
         if (user == null)
         {
             return NotFound("User not found");
@@ -168,6 +183,16 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         user.IsBlacklisted = false;
         context.BlacklistedUsers.Remove(blacklistEntry);
+        context.AdminActions.Add(new AdminAction
+        {
+            ByAdminId      = admin.Id,
+            ByAdmin        = admin,
+            UserAffectedId = user.Id,
+            UserAffected   = user,
+            Action         = "Remove from Blacklist",
+            Reason         = null,
+            Date           = DateTime.UtcNow
+        });
         await context.SaveChangesAsync();
 
         return NoContent();
