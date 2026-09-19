@@ -124,10 +124,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             Date         = DateTime.UtcNow
         });
 
-        Console.WriteLine($"AdminActions pending: {context.ChangeTracker.Entries<AdminAction>().Count()}");
-        Console.WriteLine($"BlacklistedUsers pending: {context.ChangeTracker.Entries<BlacklistedUser>().Count()}");
-        var changes = await context.SaveChangesAsync();
-        Console.WriteLine($"Saved {changes} changes.");
+        await context.SaveChangesAsync();
 
         return Ok(new UserDto
         {
@@ -178,6 +175,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> ToggleAdminAsync(int id)
     {
         var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
@@ -195,6 +193,11 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }
 
         var user = await context.Users.FindAsync(id);
+
+        if (user.IsBlacklisted)
+        {
+            return Conflict("Cannot change admin status for a blacklisted user.");
+        }
 
         if (user == null)
         {
