@@ -103,6 +103,9 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         }
 
         user.IsBlacklisted = true;
+        user.IsAdmin = false;
+        user.IsBusinessAgent = false;
+        user.IsBusinessManager = false;
 
         var blacklistReason = reason.Trim();
 
