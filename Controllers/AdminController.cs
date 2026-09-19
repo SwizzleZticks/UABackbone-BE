@@ -67,6 +67,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
     [HttpPost("user/add-blacklist/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,17 +97,37 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             return Conflict("User is already blacklisted.");
         }
 
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            return BadRequest("A blacklist reason is required.");
+        }
+
         user.IsBlacklisted = true;
 
+        var blacklistReason = reason.Trim();
+
+        context.AdminActions.Add(new AdminAction
+        {
+            ByAdminId      = admin.Id,
+            ByAdmin        = admin,
+            UserAffectedId = user.Id,
+            UserAffected   = user,
+            Action         = "Blacklist user",
+            Reason         = blacklistReason,
+            Date           = DateTime.UtcNow
+        });
         context.BlacklistedUsers.Add(new BlacklistedUser
         {
             UserAffected = user,
             ByAdmin      = admin,
-            Reason       = reason.Trim(),
+            Reason       = blacklistReason,
             Date         = DateTime.UtcNow
         });
 
-        await context.SaveChangesAsync();
+        Console.WriteLine($"AdminActions pending: {context.ChangeTracker.Entries<AdminAction>().Count()}");
+        Console.WriteLine($"BlacklistedUsers pending: {context.ChangeTracker.Entries<BlacklistedUser>().Count()}");
+        var changes = await context.SaveChangesAsync();
+        Console.WriteLine($"Saved {changes} changes.");
 
         return Ok(new UserDto
         {
