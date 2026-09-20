@@ -28,6 +28,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IAuthorizationHandler, CurrentAdminHandler>();
+        services.AddScoped<IUserMapper, UserMapperService>();
         return services;
     }
 }

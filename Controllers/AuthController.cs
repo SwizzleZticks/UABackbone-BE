@@ -9,7 +9,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers
 {
-    public class AuthController(RailwayContext context, IEmailService emailService, ITokenService tokenService, IIdentityService identityService) : BaseApiController
+    public class AuthController(RailwayContext context, IEmailService emailService, ITokenService tokenService, IIdentityService identityService, IUserMapper userMapperService) : BaseApiController
     {
         [HttpPost("register-pending")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -76,16 +76,7 @@ namespace UABackbone_Backend.Controllers
             var mailResp = await emailService.SendPendingAsync(pendingUser.Email, pendingUser.FirstName ?? "");
             Console.WriteLine($"PENDING EMAIL STATUS {(int)mailResp.StatusCode}");
 
-            var pendingUserDto = new PendingUserDto
-            {
-                Id          = pendingUser.Id,
-                Username    = pendingUser.Username,
-                FirstName   = pendingUser.FirstName,
-                LastName    = pendingUser.LastName,
-                Email       = pendingUser.Email,
-                Local       = pendingUser.Local,
-                SubmittedAt = DateTime.UtcNow
-            };
+            var pendingUserDto = userMapperService.ToPendingUserDto(pendingUser);
 
             return Created("api/Account/register-pending", pendingUserDto);
         }
@@ -251,20 +242,7 @@ namespace UABackbone_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(new UserDto
-            {
-                Id                = user.Id,
-                Username          = user.Username,
-                Email             = user.Email,
-                FirstName         = user.FirstName,
-                LastName          = user.LastName,
-                Local             = user.LocalId,
-                IsAdmin           = user.IsAdmin,
-                IsBlacklisted     = user.IsBlacklisted,
-                IsBusinessAgent   = user.IsBusinessAgent,
-                IsBusinessManager = user.IsBusinessManager,
-            });
+            return Ok(userMapperService.ToUserDto(user));
         }
-
     }
 }

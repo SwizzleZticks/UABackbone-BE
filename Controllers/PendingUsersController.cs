@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UABackbone_Backend.DTOs;
+using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers
 {
     [Route("api/pending-users")]
     [ApiController]
-    public class PendingUsersController(RailwayContext context) : BaseApiController
+    public class PendingUsersController(RailwayContext context, IUserMapper userMapperService) : BaseApiController
     {
         [HttpGet("uacard/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -26,20 +27,13 @@ namespace UABackbone_Backend.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<User>> GetPendingUserByIdAsync(int id)
+        public async Task<ActionResult<PendingUserDto>> GetPendingUserByIdAsync(int id)
         {
             var user = await context.PendingUsers.FindAsync(id);
 
-            return user != null ? Ok(new PendingUserDto
-            {
-                Id          = user.Id,
-                Username    = user.Username,
-                Email       = user.Email,
-                FirstName   = user.FirstName,
-                LastName    = user.LastName,
-                Local       = user.Local,
-                SubmittedAt = user.SubmittedAt,
-            }) : NotFound("User not found");
+            return user != null 
+                ? Ok(userMapperService.ToPendingUserDto(user)) 
+                : NotFound("User not found");
         }
 
         [HttpGet("all-pending")]
@@ -50,16 +44,7 @@ namespace UABackbone_Backend.Controllers
             List<PendingUserDto> pendingUsersDtos = new List<PendingUserDto>();
             foreach (var pendingUser in pendingUsers)
             {
-                var pendingUserDto = new PendingUserDto
-                {
-                    Id          = pendingUser.Id,
-                    Username    = pendingUser.Username,
-                    FirstName   = pendingUser.FirstName,
-                    LastName    = pendingUser.LastName,
-                    Email       = pendingUser.Email,
-                    Local       = pendingUser.Local,
-                    SubmittedAt = pendingUser.SubmittedAt
-                };
+                var pendingUserDto = userMapperService.ToPendingUserDto(pendingUser);
                 pendingUsersDtos.Add(pendingUserDto);
             }
 
@@ -80,16 +65,7 @@ namespace UABackbone_Backend.Controllers
             List<PendingUserDto> pendingUsersDtos = new List<PendingUserDto>();
             foreach (var pendingUser in pendingUsers)
             {
-                var pendingUserDto = new PendingUserDto
-                {
-                    Id          = pendingUser.Id,
-                    Username    = pendingUser.Username,
-                    FirstName   = pendingUser.FirstName,
-                    LastName    = pendingUser.LastName,
-                    Email       = pendingUser.Email,
-                    Local       = pendingUser.Local,
-                    SubmittedAt = pendingUser.SubmittedAt
-                };
+                var pendingUserDto = userMapperService.ToPendingUserDto(pendingUser);
                 pendingUsersDtos.Add(pendingUserDto);
             }
 

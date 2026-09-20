@@ -8,7 +8,7 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
 [Authorize(Policy = "CurrentAdmin")]
-public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService) : BaseApiController
+public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService, IUserMapper userMapperService) : BaseApiController
 {
     [HttpPut("user/update/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -31,19 +31,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         await context.SaveChangesAsync();
 
-        return Ok(new UserDto
-        {
-            Id                = user.Id,
-            Username          = user.Username,
-            Email             = user.Email,
-            FirstName         = user.FirstName,
-            LastName          = user.LastName,
-            Local             = user.LocalId,
-            IsAdmin           = user.IsAdmin,
-            IsBlacklisted     = user.IsBlacklisted,
-            IsBusinessAgent   = user.IsBusinessAgent,
-            IsBusinessManager = user.IsBusinessManager,
-        });
+        return Ok(userMapperService.ToUserDto(user));
     }
 
     [HttpDelete("user/delete/{id}")]
@@ -129,19 +117,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         await context.SaveChangesAsync();
 
-        return Ok(new UserDto
-        {
-            Id                = user.Id,
-            Username          = user.Username,
-            Email             = user.Email,
-            FirstName         = user.FirstName,
-            LastName          = user.LastName,
-            Local             = user.LocalId,
-            IsAdmin           = user.IsAdmin,
-            IsBlacklisted     = user.IsBlacklisted,
-            IsBusinessAgent   = user.IsBusinessAgent,
-            IsBusinessManager = user.IsBusinessManager,
-        });
+        return Ok(userMapperService.ToUserDto(user));
     }
 
     [HttpDelete("user/remove-blacklist/{id}")]

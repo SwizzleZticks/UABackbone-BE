@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UABackbone_Backend.DTOs;
+using UABackbone_Backend.Interfaces;
 using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
-public class UsersController(RailwayContext context) : BaseApiController
+public class UsersController(RailwayContext context, IUserMapper userMapperService) : BaseApiController
 {
 
     [HttpGet("{id}")]
@@ -14,19 +15,7 @@ public class UsersController(RailwayContext context) : BaseApiController
     {
         var user = await context.Users.FindAsync(id);
 
-        return user != null ? Ok(new UserDto
-        {
-            Id                = user.Id,
-            Username          = user.Username,
-            Email             = user.Email,
-            FirstName         = user.FirstName,
-            LastName          = user.LastName,
-            Local             = user.LocalId,
-            IsAdmin           = user.IsAdmin,
-            IsBlacklisted     = user.IsBlacklisted,
-            IsBusinessAgent   = user.IsBusinessAgent,
-            IsBusinessManager = user.IsBusinessManager
-        }) : NotFound("User not found");
+        return user != null ? Ok(userMapperService.ToUserDto(user)) : NotFound("User not found");
     }
 
     [HttpGet("all-users")]
@@ -88,19 +77,7 @@ public class UsersController(RailwayContext context) : BaseApiController
 
         foreach (var user in users)
         {
-            var userDto = new UserDto
-            {
-                Id                = user.Id,
-                Username          = user.Username,
-                Email             = user.Email,
-                FirstName         = user.FirstName,
-                LastName          = user.LastName,
-                Local             = user.LocalId,
-                IsAdmin           = user.IsAdmin,
-                IsBlacklisted     = user.IsBlacklisted,
-                IsBusinessAgent   = user.IsBusinessAgent,
-                IsBusinessManager = user.IsBusinessManager
-            };
+            var userDto = userMapperService.ToUserDto(user);
             userDtos.Add(userDto);
         }
 
