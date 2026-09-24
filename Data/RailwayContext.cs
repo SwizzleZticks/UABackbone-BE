@@ -84,6 +84,15 @@ public partial class RailwayContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        modelBuilder.Entity<PendingUser>(entity =>
+        {
+            entity.Property(e => e.SubmittedAt)
+                .HasConversion(
+                    v => v,
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                );
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }
