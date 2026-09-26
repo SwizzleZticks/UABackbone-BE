@@ -20,7 +20,7 @@ public class AdminController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
+    public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] UpdateUserDto aUser, int id)
     {
         var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
         if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
