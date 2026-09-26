@@ -81,7 +81,7 @@ public partial class RailwayContext : DbContext
             entity.HasOne(e => e.UserAffected)
                 .WithMany()
                 .HasForeignKey(e => e.UserAffectedId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<PendingUser>(entity =>
