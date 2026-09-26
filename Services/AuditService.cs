@@ -16,7 +16,7 @@ namespace UABackbone_Backend.Services
             {
                 ByAdminId      = admin.Id, 
                 ByAdmin        = admin,
-                UserAffectedId = user.Id,
+                UserAffectedId = user?.Id,
                 UserAffected   = user,
                 Action         = FormatAction(actionType),
                 Reason         = reason,
