@@ -8,7 +8,13 @@ using UABackbone_Backend.Models;
 
 namespace UABackbone_Backend.Controllers;
 [Authorize(Policy = "CurrentAdmin")]
-public class AdminController(RailwayContext context, IEmailService emailService, ITokenService tokenService, IUserMapper userMapperService) : BaseApiController
+public class AdminController(
+    RailwayContext context, 
+    IEmailService emailService, 
+    ITokenService tokenService, 
+    IUserMapper userMapperService,
+    IAuditService auditService)
+    : BaseApiController
 {
     [HttpPut("user/update/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -16,6 +22,19 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserDto>> UpdateUserAsync([FromBody] User aUser, int id)
     {
+        var sidClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid);
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var user = await context.Users.FindAsync(id);
 
         if (user is null)
@@ -29,28 +48,10 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         user.LastName  = aUser.LastName;
         user.LocalId   = aUser.LocalId;
 
+        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserUpdated);
         await context.SaveChangesAsync();
 
         return Ok(userMapperService.ToUserDto(user));
-    }
-
-    [HttpDelete("user/delete/{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteUserAsync(int id)
-    {
-        var user = await context.Users.FindAsync(id);
-
-        if (user == null)
-        {
-            return NotFound("User not found");
-        }
-        context.Users.Remove(user);
-        await context.SaveChangesAsync();
-
-        return NoContent();
     }
 
     [HttpPost("user/add-blacklist/{id}")]
@@ -95,23 +96,13 @@ public class AdminController(RailwayContext context, IEmailService emailService,
         user.IsBusinessAgent = false;
         user.IsBusinessManager = false;
 
-        var blacklistReason = reason.Trim();
+        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserBlacklisted, reason.Trim());
 
-        context.AdminActions.Add(new AdminAction
-        {
-            ByAdminId      = admin.Id,
-            ByAdmin        = admin,
-            UserAffectedId = user.Id,
-            UserAffected   = user,
-            Action         = "Blacklist user",
-            Reason         = blacklistReason,
-            Date           = DateTime.UtcNow
-        });
         context.BlacklistedUsers.Add(new BlacklistedUser
         {
             UserAffected = user,
             ByAdmin      = admin,
-            Reason       = blacklistReason,
+            Reason       = reason.Trim(),
             Date         = DateTime.UtcNow
         });
 
@@ -145,30 +136,27 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             .Include(b => b.UserAffected)
             .FirstOrDefaultAsync(b => b.UserAffected.Id == id);
 
-        if (blacklistEntry == null)
+        if (blacklistEntry is null)
         {
-            return NotFound("Blacklist entry not found");
+            return NotFound("Blacklist entry not found.");
         }
 
         var user = blacklistEntry.UserAffected;
 
-        if (user == null)
+        if (user is null)
         {
-            return NotFound("User not found");
+            return NotFound("User not found.");
         }
 
         user.IsBlacklisted = false;
+
         context.BlacklistedUsers.Remove(blacklistEntry);
-        context.AdminActions.Add(new AdminAction
-        {
-            ByAdminId      = admin.Id,
-            ByAdmin        = admin,
-            UserAffectedId = user.Id,
-            UserAffected   = user,
-            Action         = "Remove from Blacklist",
-            Reason         = null,
-            Date           = DateTime.UtcNow
-        });
+
+        await auditService.LogActionAsync(
+            admin,
+            user,
+            Enums.AuditActionType.UserUnblacklisted);
+
         await context.SaveChangesAsync();
 
         return NoContent();
@@ -198,27 +186,25 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         var user = await context.Users.FindAsync(id);
 
-        if (user.IsBlacklisted)
-        {
-            return Conflict("Cannot change admin status for a blacklisted user.");
-        }
-
         if (user == null)
         {
             return NotFound("User not found");
         }
 
+        if (user.IsBlacklisted)
+        {
+            return Conflict("Cannot change admin status for a blacklisted user.");
+        }
+
+
         user.IsAdmin = !user.IsAdmin;
 
-        context.AdminActions.Add(new AdminAction
-        {
-            ByAdminId      = admin.Id,
-            ByAdmin        = admin,
-            UserAffectedId = user.Id,
-            UserAffected   = user,
-            Action         = user.IsAdmin ? "Promoted" : "Demoted",
-            Date           = DateTime.UtcNow
-        });
+        await auditService.LogActionAsync(
+            admin,
+            user,
+            user.IsAdmin 
+            ? Enums.AuditActionType.UserPromoted 
+            : Enums.AuditActionType.UserDemoted);
 
         await context.SaveChangesAsync();
 
@@ -231,6 +217,20 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<UserDto>> VerifyUserAsync(int id)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var pendingUser = await context.PendingUsers.FindAsync(id);
         if (pendingUser == null) return NotFound();
 
@@ -249,6 +249,12 @@ public class AdminController(RailwayContext context, IEmailService emailService,
 
         context.PendingUsers.Remove(pendingUser);
         context.Users.Add(user);
+
+        await auditService.LogActionAsync(
+          admin,
+          user,
+          Enums.AuditActionType.UserApproved);
+
         await context.SaveChangesAsync();
 
         await emailService.SendApprovedAsync(user.Email, user.FirstName ?? "");
@@ -276,12 +282,33 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> DeletePendingUserAsync(int id, [FromBody]string reason)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var user = await context.PendingUsers.FindAsync(id);
 
         if (user == null)
         {
             return NotFound("User not found");
         }
+
+        await auditService.LogActionAsync(
+         admin,
+         null,
+         Enums.AuditActionType.UserRejected,
+         $"User: {user.FirstName} {user.LastName} ({user.Email}), Reason: {reason}");
+
         context.PendingUsers.Remove(user);
         await context.SaveChangesAsync();
 
@@ -296,6 +323,21 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<LocalUnion>> CreateLocalAsync([FromBody] LocalUnion newLocal)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalAdded, $"Local {newLocal.Local}");
         context.LocalUnions.Add(newLocal);
         await context.SaveChangesAsync();
 
@@ -309,6 +351,20 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LocalUnion>> UpdateLocalAsync(int local, [FromBody] LocalUnionDto aLocal)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var queriedLocal = await context.LocalUnions.FindAsync(local);
         if (queriedLocal == null)
         {
@@ -328,6 +384,8 @@ public class AdminController(RailwayContext context, IEmailService emailService,
                 }
             }
         }
+
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"Local {queriedLocal.Local}");
         await context.SaveChangesAsync();
 
         return Ok(queriedLocal);
@@ -339,6 +397,20 @@ public class AdminController(RailwayContext context, IEmailService emailService,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteLocalAsync(int local)
     {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
         var localUnion = await context.LocalUnions.FindAsync(local);
 
         if (localUnion == null)
@@ -346,6 +418,7 @@ public class AdminController(RailwayContext context, IEmailService emailService,
             return NotFound("Local not found");
         }
 
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, local.ToString());
         context.LocalUnions.Remove(localUnion);
         await context.SaveChangesAsync();
 
