@@ -48,7 +48,7 @@ public class AdminController(
         user.LastName  = aUser.LastName;
         user.LocalId   = aUser.LocalId;
 
-        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserUpdated);
+        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserUpdated, $"{user.Username}");
         await context.SaveChangesAsync();
 
         return Ok(userMapperService.ToUserDto(user));
@@ -96,7 +96,7 @@ public class AdminController(
         user.IsBusinessAgent = false;
         user.IsBusinessManager = false;
 
-        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserBlacklisted, reason.Trim());
+        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserBlacklisted, $"User:{user.Username} Reason:{reason.ToString()}");
 
         context.BlacklistedUsers.Add(new BlacklistedUser
         {
@@ -155,7 +155,8 @@ public class AdminController(
         await auditService.LogActionAsync(
             admin,
             user,
-            Enums.AuditActionType.UserUnblacklisted);
+            Enums.AuditActionType.UserUnblacklisted,
+            $"{user.Username}");
 
         await context.SaveChangesAsync();
 
@@ -204,7 +205,8 @@ public class AdminController(
             user,
             user.IsAdmin 
             ? Enums.AuditActionType.UserPromoted 
-            : Enums.AuditActionType.UserDemoted);
+            : Enums.AuditActionType.UserDemoted,
+            $"{user.Username}");
 
         await context.SaveChangesAsync();
 
@@ -253,7 +255,8 @@ public class AdminController(
         await auditService.LogActionAsync(
           admin,
           user,
-          Enums.AuditActionType.UserApproved);
+          Enums.AuditActionType.UserApproved,
+          $"{user.Username}");
 
         await context.SaveChangesAsync();
 
@@ -418,7 +421,7 @@ public class AdminController(
             return NotFound("Local not found");
         }
 
-        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, local.ToString());
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"{localUnion.Local}");
         context.LocalUnions.Remove(localUnion);
         await context.SaveChangesAsync();
 
