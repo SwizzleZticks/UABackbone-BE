@@ -213,6 +213,106 @@ public class AdminController(
         return Ok();
     }
 
+    [HttpPut("user/agent-toggle/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ToggleAgentAsync(int id)
+    {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
+        var user = await context.Users.FindAsync(id);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        if (user.IsBlacklisted)
+        {
+            return Conflict("Cannot change user status for a blacklisted user.");
+        }
+
+
+        user.IsBusinessAgent = !user.IsBusinessAgent;
+
+        await auditService.LogActionAsync(
+            admin,
+            user,
+            user.IsBusinessAgent
+            ? Enums.AuditActionType.UserAddedBA
+            : Enums.AuditActionType.UserRemovedBA,
+            user.Username);
+
+        await context.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpPut("user/manager-toggle/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ToggleManagerAsync(int id)
+    {
+        var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
+
+        if (sidClaim is null || !int.TryParse(sidClaim.Value, out var adminId))
+        {
+            return Unauthorized("Missing or invalid admin identity.");
+        }
+
+        var admin = await context.Users.FindAsync(adminId);
+
+        if (admin is null)
+        {
+            return NotFound("Admin not found.");
+        }
+
+        var user = await context.Users.FindAsync(id);
+
+        if (user == null)
+        {
+            return NotFound("User not found");
+        }
+
+        if (user.IsBlacklisted)
+        {
+            return Conflict("Cannot change user status for a blacklisted user.");
+        }
+
+
+        user.IsBusinessManager = !user.IsBusinessManager;
+
+        await auditService.LogActionAsync(
+            admin,
+            user,
+            user.IsBusinessManager
+            ? Enums.AuditActionType.UserAddedBM
+            : Enums.AuditActionType.UserRemovedBM,
+            user.Username);
+
+        await context.SaveChangesAsync();
+
+        return Ok();
+    }
+
     [HttpPost("pending-user/approve/{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
