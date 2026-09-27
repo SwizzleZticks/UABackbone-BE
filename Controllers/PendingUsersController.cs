@@ -53,17 +53,36 @@ namespace UABackbone_Backend.Controllers
 
         [HttpGet("all-pending-paginated")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedResultDto<PendingUserDto>>> GetPendingUsersPaginated(int page = 1, int limitSize = 25)
+        public async Task<ActionResult<PagedResultDto<PendingUserDto>>> GetPendingUsersPaginated(
+            int page = 1,
+            int limitSize = 25,
+            string? searchTerm = null)
         {
-            var pendingUsers = await context.PendingUsers
+            var pendingUsers = context.PendingUsers.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var normalized = searchTerm.Trim().ToLower();
+
+                pendingUsers = pendingUsers.Where(u =>
+                    u.Id.ToString().Contains(normalized) ||
+                    u.FirstName.ToLower().Contains(normalized) ||
+                    u.LastName.ToLower().Contains(normalized) ||
+                    u.Email.ToLower().Contains(normalized) ||
+                    u.Username.ToLower().Contains(normalized) ||
+                    u.Local.ToString().Contains(normalized));
+            }
+
+            var totalCount = await pendingUsers.CountAsync();
+
+            var allPendingUsers = await pendingUsers
                 .Skip((page - 1) * limitSize)
                 .Take(limitSize)
-                .AsQueryable()
                 .ToListAsync();
-            var totalCount = await context.PendingUsers.CountAsync();
 
             List<PendingUserDto> pendingUsersDtos = new List<PendingUserDto>();
-            foreach (var pendingUser in pendingUsers)
+
+            foreach (var pendingUser in allPendingUsers)
             {
                 var pendingUserDto = userMapperService.ToPendingUserDto(pendingUser);
                 pendingUsersDtos.Add(pendingUserDto);
