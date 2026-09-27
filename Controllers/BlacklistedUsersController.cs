@@ -49,27 +49,46 @@ namespace UABackbone_Backend.Controllers
 
             return Ok(blacklistedUserDtos);
         }
-
         [HttpGet("all-blacklisted-paginated")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedResultDto<BlacklistedUserDto>>> GetBlacklistedUsersPaginated(int page = 1, int limitSize = 25)
+        public async Task<ActionResult<PagedResultDto<BlacklistedUserDto>>> GetBlacklistedUsersPaginated(
+            int page = 1,
+            int limitSize = 25,
+            string? searchTerm = null)
         {
-            var blacklistedUsers = await context.BlacklistedUsers
+            var blacklistedUsers = context.BlacklistedUsers
                 .Include(b => b.UserAffected)
                 .Include(b => b.ByAdmin)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var normalized = searchTerm.Trim().ToLower();
+
+                blacklistedUsers = blacklistedUsers.Where(b =>
+                    b.Id.ToString().Contains(normalized) ||
+                    b.UserAffected.Id.ToString().Contains(normalized) ||
+                    b.UserAffected.FirstName.ToLower().Contains(normalized) ||
+                    b.UserAffected.LastName.ToLower().Contains(normalized) ||
+                    b.UserAffected.Email.ToLower().Contains(normalized) ||
+                    b.UserAffected.Username.ToLower().Contains(normalized) ||
+                    b.UserAffected.LocalId.ToString().Contains(normalized));
+            }
+
+            var totalCount = await blacklistedUsers.CountAsync();
+
+            var allBlacklistedUsers = await blacklistedUsers
                 .Skip((page - 1) * limitSize)
                 .Take(limitSize)
                 .ToListAsync();
 
-            var totalCount = await context.BlacklistedUsers.CountAsync();
-
             var blacklistedUserDtos = new List<BlacklistedUserDto>();
 
-            foreach (var blacklistedUser in blacklistedUsers)
+            foreach (var blacklistedUser in allBlacklistedUsers)
             {
-                var blacklistedUserDto = userMapperService.ToBlacklistedUserDto(blacklistedUser);
-
-                blacklistedUserDtos.Add(blacklistedUserDto);
+                blacklistedUserDtos.Add(
+                    userMapperService.ToBlacklistedUserDto(blacklistedUser)
+                );
             }
 
             return Ok(new PagedResultDto<BlacklistedUserDto>
