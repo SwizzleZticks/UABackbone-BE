@@ -38,7 +38,7 @@ public class UsersController(RailwayContext context, IUserMapper userMapperServi
     {
         var users = context.Users.AsQueryable();
 
-        if (!string.IsNullOrEmpty(searchTerm))
+        if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var normalized = searchTerm.Trim().ToLower();
             users = users.Where(u =>

@@ -48,7 +48,7 @@ public class AdminController(
         user.LastName  = aUser.LastName;
         user.LocalId   = aUser.LocalId;
 
-        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserUpdated, $"{user.Username}");
+        await auditService.LogActionAsync(admin, user, Enums.AuditActionType.UserUpdated, user.Username);
         await context.SaveChangesAsync();
 
         return Ok(userMapperService.ToUserDto(user));
@@ -156,7 +156,7 @@ public class AdminController(
             admin,
             user,
             Enums.AuditActionType.UserUnblacklisted,
-            $"{user.Username}");
+            user.Username);
 
         await context.SaveChangesAsync();
 
@@ -206,7 +206,7 @@ public class AdminController(
             user.IsAdmin 
             ? Enums.AuditActionType.UserPromoted 
             : Enums.AuditActionType.UserDemoted,
-            $"{user.Username}");
+            user.Username);
 
         await context.SaveChangesAsync();
 
@@ -356,7 +356,7 @@ public class AdminController(
           admin,
           user,
           Enums.AuditActionType.UserApproved,
-          $"{user.Username}");
+          user.Username);
 
         await context.SaveChangesAsync();
 
@@ -440,7 +440,7 @@ public class AdminController(
             return NotFound("Admin not found.");
         }
 
-        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalAdded, $"Local {newLocal.Local}");
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalAdded, $"Local: {newLocal.Local}");
         context.LocalUnions.Add(newLocal);
         await context.SaveChangesAsync();
 
@@ -488,7 +488,7 @@ public class AdminController(
             }
         }
 
-        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"Local {queriedLocal.Local}");
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"Local: {queriedLocal.Local}");
         await context.SaveChangesAsync();
 
         return Ok(queriedLocal);
@@ -521,7 +521,7 @@ public class AdminController(
             return NotFound("Local not found");
         }
 
-        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"{localUnion.Local}");
+        await auditService.LogActionAsync(admin, null, Enums.AuditActionType.LocalUpdated, $"Local: {localUnion.Local}");
         context.LocalUnions.Remove(localUnion);
         await context.SaveChangesAsync();
 
