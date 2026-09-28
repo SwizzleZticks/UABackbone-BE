@@ -537,12 +537,14 @@ public class AdminController(
         var usersCount            = await context.Users.CountAsync();
         var pendingUsersCount     = await context.PendingUsers.CountAsync();
         var blacklistedUsersCount = await context.BlacklistedUsers.CountAsync();
+        var localsCount           = await context.LocalUnions.CountAsync();
 
         return Ok(new DashboardDto
         {
             TotalUsersCount       = usersCount,
             PendingUsersCount     = pendingUsersCount,
             BlacklistedUsersCount = blacklistedUsersCount,
+            LocalsCount           = localsCount,
             JobsCount             = 0, //TODO: Fix when implemented
         });
     }
