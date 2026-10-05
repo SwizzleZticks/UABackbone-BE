@@ -88,6 +88,131 @@ namespace UABackbone_Backend.Migrations
                     b.ToTable("BlacklistedUsers");
                 });
 
+            modelBuilder.Entity("UABackbone_Backend.Models.Job", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Contractor")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Hours")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JobName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LocalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal?>("PerDiem")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<DateTime>("PostedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("PostedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalId");
+
+                    b.HasIndex("PostedByUserId");
+
+                    b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobCraft", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AmountNeeded")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Craft")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobCrafts");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobRequirement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Requirement")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobRequirements");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobWeldCert", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Certification")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobWeldCerts");
+                });
+
             modelBuilder.Entity("UABackbone_Backend.Models.LocalUnion", b =>
                 {
                     b.Property<int>("Local")
@@ -285,6 +410,58 @@ namespace UABackbone_Backend.Migrations
                     b.Navigation("UserAffected");
                 });
 
+            modelBuilder.Entity("UABackbone_Backend.Models.Job", b =>
+                {
+                    b.HasOne("UABackbone_Backend.Models.LocalUnion", "Local")
+                        .WithMany()
+                        .HasForeignKey("LocalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UABackbone_Backend.Models.User", "PostedByUser")
+                        .WithMany()
+                        .HasForeignKey("PostedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Local");
+
+                    b.Navigation("PostedByUser");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobCraft", b =>
+                {
+                    b.HasOne("UABackbone_Backend.Models.Job", "Job")
+                        .WithMany("Crafts")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobRequirement", b =>
+                {
+                    b.HasOne("UABackbone_Backend.Models.Job", "Job")
+                        .WithMany("Requirements")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.JobWeldCert", b =>
+                {
+                    b.HasOne("UABackbone_Backend.Models.Job", "Job")
+                        .WithMany("Certs")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("UABackbone_Backend.Models.User", b =>
                 {
                     b.HasOne("UABackbone_Backend.Models.LocalUnion", "Local")
@@ -294,6 +471,15 @@ namespace UABackbone_Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Local");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.Job", b =>
+                {
+                    b.Navigation("Certs");
+
+                    b.Navigation("Crafts");
+
+                    b.Navigation("Requirements");
                 });
 #pragma warning restore 612, 618
         }

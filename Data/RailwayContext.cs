@@ -13,6 +13,10 @@ public partial class RailwayContext : DbContext
     public virtual DbSet<LocalUnion>      LocalUnions      { get; set; }
     public virtual DbSet<User>            Users            { get; set; }
     public virtual DbSet<AdminAction>     AdminActions     { get; set; }
+    public virtual DbSet<Job>             Jobs             { get; set; }
+    public virtual DbSet<JobCraft>        JobCrafts        { get; set; }
+    public virtual DbSet<JobWeldCert>     JobWeldCerts     { get; set; }
+    public virtual DbSet<JobRequirement>  JobRequirements  { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -91,6 +95,39 @@ public partial class RailwayContext : DbContext
                     v => v,
                     v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
                 );
+        });
+
+        modelBuilder.Entity<Job>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.PerDiem)
+                .HasPrecision(7, 2);
+
+            entity.HasOne(e => e.Local)
+                .WithMany()
+                .HasForeignKey(e => e.LocalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.PostedByUser)
+                .WithMany()
+                .HasForeignKey(e => e.PostedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(e => e.Crafts)
+                .WithOne(e => e.Job)
+                .HasForeignKey(e => e.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Certs)
+                .WithOne(e => e.Job)
+                .HasForeignKey(e => e.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Requirements)
+                .WithOne(e => e.Job)
+                .HasForeignKey(e => e.JobId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
 
