@@ -252,6 +252,81 @@ namespace UABackbone_Backend.Migrations
                     b.ToTable("LocalUnions");
                 });
 
+            modelBuilder.Entity("UABackbone_Backend.Models.PendingJob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CertsJson")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Contractor")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CraftsJson")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Hours")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("JobName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("LocalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal?>("PerDiem")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<string>("ProofFileKey")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProofSource")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequirementsJson")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SubmittedByUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocalId");
+
+                    b.HasIndex("SubmittedByUserId");
+
+                    b.ToTable("PendingJobs");
+                });
+
             modelBuilder.Entity("UABackbone_Backend.Models.PendingUser", b =>
                 {
                     b.Property<int>("Id")
@@ -460,6 +535,25 @@ namespace UABackbone_Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("UABackbone_Backend.Models.PendingJob", b =>
+                {
+                    b.HasOne("UABackbone_Backend.Models.LocalUnion", "Local")
+                        .WithMany()
+                        .HasForeignKey("LocalId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UABackbone_Backend.Models.User", "SubmittedByUser")
+                        .WithMany()
+                        .HasForeignKey("SubmittedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Local");
+
+                    b.Navigation("SubmittedByUser");
                 });
 
             modelBuilder.Entity("UABackbone_Backend.Models.User", b =>

@@ -17,6 +17,7 @@ public partial class RailwayContext : DbContext
     public virtual DbSet<JobCraft>        JobCrafts        { get; set; }
     public virtual DbSet<JobWeldCert>     JobWeldCerts     { get; set; }
     public virtual DbSet<JobRequirement>  JobRequirements  { get; set; }
+    public virtual DbSet<PendingJob>      PendingJobs      { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -128,6 +129,24 @@ public partial class RailwayContext : DbContext
                 .WithOne(e => e.Job)
                 .HasForeignKey(e => e.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PendingJob>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.PerDiem)
+                .HasPrecision(7, 2);
+
+            entity.HasOne(e => e.Local)
+                .WithMany()
+                .HasForeignKey(e => e.LocalId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.SubmittedByUser)
+                .WithMany()
+                .HasForeignKey(e => e.SubmittedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
 

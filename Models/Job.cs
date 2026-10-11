@@ -18,8 +18,8 @@
         public string?    Notes              { get; set; }
         public DateTime   PostedAt           { get; set; }
         public DateTime   ExpiresAt          { get; set; }
-        public ICollection<JobCraft>       Crafts       { get; set; }
-        public ICollection<JobWeldCert>    Certs        { get; set; }
-        public ICollection<JobRequirement> Requirements { get; set; }
+        public ICollection<JobCraft>       Crafts       { get; set; } = [];
+        public ICollection<JobWeldCert>    Certs        { get; set; } = [];
+        public ICollection<JobRequirement> Requirements { get; set; } = [];
     }
 }

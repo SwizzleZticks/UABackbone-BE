@@ -20,5 +20,7 @@
         JobAdded,
         JobRemoved,
         JobUpdated,
+        JobApproved,
+        JobRejected,
     }
 }

@@ -26,10 +26,11 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddIdentityService(this IServiceCollection services)
     {
-        services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IIdentityService,      IdentityService>();
         services.AddScoped<IAuthorizationHandler, CurrentAdminHandler>();
-        services.AddScoped<IUserMapper, UserMapperService>();
-        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IUserMapper,           UserMapperService>();
+        services.AddScoped<IAuditService,         AuditService>();
+        services.AddScoped<IJobService,           JobService>();
         return services;
     }
 }
