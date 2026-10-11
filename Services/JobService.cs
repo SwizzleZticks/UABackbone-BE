@@ -163,6 +163,123 @@ namespace UABackbone_Backend.Services
             return true;
         }
 
+        public async Task<Job?> UpdateJobAsync(
+    int jobId,
+    CreateJobDto dto,
+    User updatedBy)
+        {
+            var job = await context.Jobs
+                .Include(j => j.Crafts)
+                .Include(j => j.Certs)
+                .Include(j => j.Requirements)
+                .FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if (job is null)
+                return null;
+
+            if (!updatedBy.IsAdmin)
+            {
+                if ((!updatedBy.IsBusinessAgent &&
+                     !updatedBy.IsBusinessManager) ||
+                    job.PostedByUserId != updatedBy.Id ||
+                    job.LocalId != updatedBy.LocalId ||
+                    dto.LocalId != job.LocalId)
+                {
+                    throw new UnauthorizedAccessException(
+                        "You cannot edit this job.");
+                }
+            }
+
+            await ValidateJobAsync(dto);
+
+            var oldLocalId = job.LocalId;
+
+            job.LocalId = dto.LocalId;
+            job.JobName = dto.JobName;
+            job.Contractor = dto.Contractor;
+            job.City = dto.City;
+            job.State = dto.State;
+            job.StartDate = dto.StartDate;
+            job.EndDate = dto.EndDate;
+            job.Hours = dto.Hours;
+            job.PerDiem = dto.PerDiem;
+            job.Notes = dto.Notes;
+            job.ExpiresAt = dto.ExpiresAt;
+
+            context.JobCrafts.RemoveRange(job.Crafts);
+            context.JobWeldCerts.RemoveRange(job.Certs);
+            context.JobRequirements.RemoveRange(job.Requirements);
+
+            job.Crafts = dto.Crafts.Select(c => new JobCraft
+            {
+                Craft = c.Craft,
+                AmountNeeded = c.AmountNeeded
+            }).ToList();
+
+            job.Certs = dto.Certs.Select(c => new JobWeldCert
+            {
+                Certification = c
+            }).ToList();
+
+            job.Requirements = dto.Requirements.Select(r => new JobRequirement
+            {
+                Requirement = r
+            }).ToList();
+
+            var reason = oldLocalId != dto.LocalId
+                ? $"Updated job #{job.Id}. Local changed from {oldLocalId} to {dto.LocalId}."
+                : $"Updated job #{job.Id}.";
+
+            await auditService.LogActionAsync(
+                updatedBy,
+                null,
+                AuditActionType.JobUpdated,
+                reason);
+
+            await context.SaveChangesAsync();
+
+            return job;
+        }
+
+        public async Task<bool> DeleteJobAsync(int jobId, User deletedBy)
+        {
+            var job = await context.Jobs
+                .FirstOrDefaultAsync(j => j.Id == jobId);
+
+            if (job is null)
+                return false;
+
+            if (!deletedBy.IsAdmin)
+            {
+                if ((!deletedBy.IsBusinessAgent &&
+                     !deletedBy.IsBusinessManager) ||
+                    job.PostedByUserId != deletedBy.Id ||
+                    job.LocalId != deletedBy.LocalId)
+                {
+                    throw new UnauthorizedAccessException(
+                        "You cannot delete this job.");
+                }
+            }
+
+            var reason = $"Removed job #{job.Id}, " +
+                         $"Name: {job.JobName}, " +
+                         $"Contractor: {job.Contractor}, " +
+                         $"Local: {job.LocalId}.";
+
+            context.Jobs.Remove(job);
+
+            await auditService.LogActionAsync(
+                deletedBy,
+                null,
+                AuditActionType.JobRemoved,
+                reason);
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
+
+
         private async Task ValidateJobAsync(CreateJobDto dto)
         {
             if (!await context.LocalUnions

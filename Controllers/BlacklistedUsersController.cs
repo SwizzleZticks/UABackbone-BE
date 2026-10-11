@@ -49,6 +49,7 @@ namespace UABackbone_Backend.Controllers
 
             return Ok(blacklistedUserDtos);
         }
+
         [HttpGet("all-blacklisted-paginated")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResultDto<BlacklistedUserDto>>> GetBlacklistedUsersPaginated(

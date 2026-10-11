@@ -14,5 +14,9 @@ namespace UABackbone_Backend.Interfaces
         // Admin review
         Task<Job?> ApproveJobAsync(int pendingJobId, User admin);
         Task<bool> RejectJobAsync(int pendingJobId, User admin, string reason);
+
+        //Admin Actions
+        Task<Job?> UpdateJobAsync(int jobId, CreateJobDto dto, User updatedBy);
+        Task<bool> DeleteJobAsync(int jobId, User deletedBy);
     }
 }
