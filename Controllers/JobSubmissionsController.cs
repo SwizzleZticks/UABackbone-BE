@@ -16,8 +16,7 @@ namespace UABackbone_Backend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> SubmitJobAsync(
-            [FromBody] SubmitJobDto dto)
+        public async Task<IActionResult> SubmitJobAsync([FromBody] SubmitJobDto dto)
         {
             var sidClaim = User.FindFirst(c => c.Type == ClaimTypes.Sid);
 

@@ -99,10 +99,10 @@ namespace UABackbone_Backend.Controllers
             }
 
             //TODO: Remove when site goes live
-            if (!user.IsAdmin)
-            {
-                return Unauthorized("UABackbone is not open for member login yet.");
-            }
+            //if (!user.IsAdmin)
+            //{
+            //   return Unauthorized("UABackbone is not open for member login yet.");
+            //}
 
             var password = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash);
 
